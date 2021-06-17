@@ -1,0 +1,82 @@
+#calender {
+    .default-btn{
+        @include default-btn (.375rem, 1.5rem);
+        margin: 0 
+    }
+    .table-height{
+        height: 800px;
+        // >div{
+        //     overflow: scroll;
+        // }
+    }
+    
+    .nav-tabs{
+        border: none;
+        
+    }
+    .total-table{
+        border: 0.5px solid #9b9b9b4f;
+    }
+    .active{
+        opacity: 1 !important;
+    }
+    .col-md-6{
+        border: none !important
+    }
+    .col-md-5, .col-md-6{
+        border-right: 0.5px solid #9b9b9b4f;
+        border-left: 0.5px solid #9b9b9b4f;
+        height: inherit;
+        overflow-y: auto;
+        
+        .row{
+            padding: 15px 0;
+        }
+        img{
+            width: 70%;
+        }
+        a{
+            border-bottom: 0.5px solid #9b9b9b4f;
+            opacity: 0.7;
+            transition: all 0.25s;
+            &:hover{
+                opacity: 1;
+            }
+        }
+    }
+    
+    img{
+        width: 50px;
+        margin: 0 auto;
+    }
+    .left-col{  
+        display: block;
+        margin: 0px auto;
+        padding: 10px 0px;
+        border-bottom: 0.5px solid #9b9b9b4f;
+    }
+    .nav-link{
+        padding: 0;
+        border: none;
+        opacity: 0.5;
+    }
+    .theater-text{
+        font-size: 12px;
+        padding: 0;
+        .theater-name{
+            color: #8bc541;
+            font-weight: bold;
+        }
+        .theater-area{
+            color: black;
+        }
+        .theater-address{
+            color: gray;
+            margin-bottom: 0;
+        }
+        .theater-detail{
+            color: red;
+        }
+    }
+    
+}

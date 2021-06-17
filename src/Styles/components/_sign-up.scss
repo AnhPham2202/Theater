@@ -1,0 +1,43 @@
+#sign-up{
+    color: white;
+    .container{
+        width: 40%;
+    }
+    label{
+        margin-bottom: 0;
+    }
+    .logo{
+        text-align: center;
+    }
+    .signup-btn{
+        width: 50%;
+        background: $m-color;
+        color: white;
+        border-radius: 0px;
+        border: none;
+    }
+    .signin-btn{
+        width: 50%;
+        border-radius: 0px;
+        border: none;
+    }
+}
+#sign-in{
+    color: white;
+    .container{
+        width: 40%;
+    }
+    label{
+        margin-bottom: 0;
+    }
+    .logo{
+        text-align: center;
+    }
+    .signin-btn{
+        background: $m-color;
+        width: 100%;
+        margin: auto;
+        border-radius: 0px;
+        border: none;
+    }
+}

@@ -1,0 +1,19 @@
+#ticket-booking{
+    .seat-div{
+        display: inline-block;
+        width: 6.25%;
+        margin: 1px 0px;
+    }
+    .seat-btn{
+        border-radius: 10px;
+        // lineheight = 2 * với font chữ 16 bằng 32 nên set cứng width và padding 0 để tạo ra btn hình vuông
+        width: 32px;
+        line-height: 2;
+        padding: 0px;
+        background-color: #429321;
+    }
+    .unavailable-seat{
+        background: $m-color;
+        opacity: 1 !important;
+    }
+}

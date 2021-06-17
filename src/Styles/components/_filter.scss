@@ -1,0 +1,23 @@
+.filter{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: white;
+    height: 70px;
+    line-height: 70px;
+    border-radius: 5px;
+    transform: translateY(-50%);
+    .filter-format{
+
+        a{
+            color: black;
+        }
+        i{
+            color: gray;
+        }
+    }
+    .btn-success{
+        background-color: #4a4a4a;
+        border-color: #4a4a4a;
+        width: 100%;
+    }
+}
+

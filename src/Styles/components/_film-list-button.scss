@@ -1,0 +1,32 @@
+#film-list, #news{
+    // reset border
+    .nav-tabs, .nav-link{
+        border: none;
+    }
+
+    
+    .nav{
+        justify-content: space-between;
+        width: 30%;
+        margin: auto;
+        
+        .nav-link.active, .nav-pills .show>.nav-link {
+            background-color: transparent;
+            @include title-format(orangered, bold);
+            transition: all 0.5s;
+            font-size: 24px;
+            &:hover{
+                font-size: 24px;
+                cursor: default; 
+            }
+        }
+        .nav-link{
+            @include title-format(black, bold);
+            transition: all 0.5s;
+            font-size: 22px;
+            &:hover{
+                font-size: 24px;
+            }
+        }
+    }
+}

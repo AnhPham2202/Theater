@@ -1,0 +1,55 @@
+
+.bg1{
+    background-image: url('./../../assets/img/carousel_1.jpg');
+    
+}
+.bg3{
+    background-image: url('./../../assets/img/carousel_3.jpg');
+    
+}
+.bg4{
+    background-image: url('./../../assets/img/carousel_4.jpg');
+    
+}
+.bg5{
+    background-image: url('./../../assets/img/carousel_5.jpg');
+    
+}
+.bg2{
+    background-image: url('./../../assets/img/carousel_2.png');
+    
+    
+}
+
+
+#carousel{
+    
+    position: relative;
+    margin-bottom: 0;
+    .carousel__item{
+        position: relative;
+        height: 600px;
+            background: {
+                repeat: no-repeat;   
+                position: center; 
+            }
+    &:hover > div{
+        opacity: 1;
+    }
+    > div{
+        @include play-btn(90px, 40px);
+        display: inline-block;
+        border: solid 2px white;
+        opacity: 0;
+        transition: all 0.35s;
+    }
+    i{
+        transform: translateX(10%);
+    }
+    a{
+        color: white;
+        }
+    }
+}
+
+

@@ -1,0 +1,44 @@
+#film-detail {
+  position: relative;
+  height: 500px;
+  padding-top: 50px;
+
+  .film-bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center;
+    filter:blur(20px);
+  }
+  .bg{
+    background: linear-gradient(to top, rgb(10, 32, 41), transparent 100%);
+    width: 100%;
+    height: 550px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
+  .film-info {
+    button{
+      @include default-btn(.375rem, 2.5rem);
+      margin: 0;
+      width: 190px;
+      display: inline-block;
+      background: $m-color;
+      color: white;
+      &:hover{
+        opacity: 0.8;
+        border-color: white;
+      }
+    }
+  }
+  .col-9{
+    margin: auto;
+    z-index: 3;
+
+  }
+}

@@ -1,0 +1,110 @@
+#film-list{
+    .slick-next{
+        right: -10%;
+    }
+    .slick-prev{
+        left: -10%;
+    }
+    .film-name{
+        display: inline-block;
+        height: 50px;
+        display: flex;
+        align-items: center;
+
+    }
+    .list-line-1, .list-line-2{
+        display: flex !important;
+        flex-wrap: wrap;
+        .film-list-item {
+            position: relative;
+            padding: 10px;
+            width: 25%;
+            cursor: pointer;
+            
+            @for $bg from 1 through 8{
+                .film-#{$bg}{
+                    background-image: url("./../../assets/img/phim-#{$bg}.png");
+                }
+            }
+            @for $bg from 10 through 16{
+                .film-#{$bg}{
+                    background-image: url("./../../assets/img/phim-#{$bg}.png");
+                }
+            }
+            .film-9{
+                background-image: url("./../../assets/img/phim-9.jpg");
+            }
+            .poster{
+                // background-image: url("../../img/phim-1.png");
+                
+                height: 350px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                background: {
+                    repeat: no-repeat;
+                    position: center;
+                    size: 100%;
+                    }
+                .overlay{
+
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(#00000000,#000000);
+                    border-radius: 5px;
+                    opacity: 0;
+                    transition: all .5s;
+                }
+                i{
+                    @include play-btn(60px, 20px);
+                    color: white;
+                    top: 40%;
+                }
+            }
+
+
+            .age-limit{
+                background-color: $m-color;
+                color: white;
+                font-weight: bold;
+                padding: 3px 5px;
+                border-radius: 3px;
+
+            }
+
+
+            span{
+                @include title-format(black, bold);
+                transition: all 0.25s;
+            }
+            p{
+                @include title-format(#4a4a4a, 500);
+            }
+
+            button{
+                width: 100%;
+                font-weight: 500;
+                font-size: 20px;
+                letter-spacing: 1px;
+                background-color: $m-color;
+                display: none;
+                transition: all 0.25s;
+            }
+            
+            &:hover {
+
+                .overlay{
+                    opacity: 1;
+                }
+                button{
+                    display: block;
+                }
+                span, p, .film-name {
+                    display: none;
+                }
+            } 
+        }
+    }
+}
+
+
+
