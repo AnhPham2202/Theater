@@ -11,7 +11,7 @@ import { layThongTinTaiKhoan } from '../../Redux/Actions/UserActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from '@material-ui/core/styles';
 import { compose, spacing, palette } from '@material-ui/system';
-import { pink } from '../../Util/var';
+import { orange, pink } from '../../Util/var';
 const Box = styled('div')(compose(spacing, palette));
 
 
@@ -27,6 +27,20 @@ const useTable = makeStyles({
         }
     }
 });
+const useBox = makeStyles({
+    root: {
+        width: '50%',
+        color: 'white',
+        display: 'inline-block',
+        padding: 2
+    },
+    bg:{
+        background: orange,
+        padding: '5px 0',
+        fontSize: 11,
+        borderRadius: 4
+    }
+});
 
 function createData(tenPhim, ngayDat, thoiLuongPhim, tenHeThongRap, tenGhe, maVe, giaVe) {
     return { tenPhim, ngayDat, thoiLuongPhim, tenHeThongRap, tenGhe, maVe, giaVe };
@@ -34,6 +48,7 @@ function createData(tenPhim, ngayDat, thoiLuongPhim, tenHeThongRap, tenGhe, maVe
 export default function TicketInfoTable() {
     const rows = [];
     const table = useTable();
+    const box = useBox();
     const dispatch = useDispatch()
     const thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan)
     let user = JSON.parse(localStorage.getItem('user'))
@@ -51,9 +66,9 @@ export default function TicketInfoTable() {
                 </Box>
             )
         })
-        console.log(gheArr);
         rows.push(createData(`${item.tenPhim}`, `${item.ngayDat.split('T')[0]}`, `${item.thoiLuongPhim}`, `${item.danhSachGhe[0].tenHeThongRap}`, gheArr, `${item.maVe}`, `${item.giaVe * item.danhSachGhe.length}`,))
     })
+    console.log(rows)
 
     return (
         <TableContainer component={Paper}>
@@ -78,7 +93,19 @@ export default function TicketInfoTable() {
                             <TableCell align="center">{row.ngayDat}</TableCell>
                             <TableCell align="center">{row.thoiLuongPhim}</TableCell>
                             <TableCell align="center">{row.tenHeThongRap}</TableCell>
-                            <TableCell align="center">{row.tenGhe}</TableCell>
+                            <TableCell >
+                                {row.tenGhe.map((ghe, index) => {
+                                    return (
+                                        <Box key={index} className={box.root}>
+                                            <Box align="center" className={box.bg}>
+                                                {ghe.props.children}
+
+                                            </Box>
+                                        </Box>
+                                    )
+                                })}
+
+                            </TableCell>
                             <TableCell align="center">{row.maVe}</TableCell>
                             <TableCell align="center">{row.giaVe}</TableCell>
                         </TableRow>

@@ -5,26 +5,82 @@ import Slider from "react-slick";
 import { NavLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Grid from '@material-ui/core/Grid';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Button from '@material-ui/core/Button';
+import { darkOrange, orange } from '../../Util/var';
+
+
+const useButton = makeStyles((theme) => ({
+
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+            width: '100%',
+            background: orange,
+            color: "white !important",
+            transition: 'all 0.5s',
+            '&:hover': {
+                background: darkOrange,
+            },
+        },
+        '& .MuiButton-root.Mui-disabled':{
+            background: 'gray',
+        },
+        '& a':{
+            color: 'white !important'
+        }
+    },
+
+}));
+
+
+const useGrid = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    },
+    limitText: {
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+    }
+}));
 
 const useList = makeStyles((theme) => ({
     root: {
         width: '100%',
         maxWidth: 360,
+        maxHeight: 400,
+        height: 'fit-content',
+        overflow: 'auto',
         backgroundColor: theme.palette.background.paper,
     },
 }));
 
-
-const usePopOver = makeStyles((theme) => ({
-    typography: {
-        padding: theme.spacing(2),
+const useClickListener = makeStyles((theme) => ({
+    root: {
+        position: 'relative',
+        cursor: 'pointer'
+    },
+    dropdown: {
+        position: 'absolute',
+        borderRadius: 5,
+        top: '90%',
+        right: 0,
+        left: 0,
+        zIndex: 1,
+        boxShadow: '0px 7px 20px 3px rgb(0 0 0 / 75%)',
+        padding: theme.spacing(1),
+        backgroundColor: theme.palette.background.paper,
     },
 }));
 
@@ -32,46 +88,74 @@ const usePopOver = makeStyles((theme) => ({
 export default function FilmList(propsRoute) {
     const dispatch = useDispatch()
     let filmArr = useSelector((state) => state.FilmDetailReducer.filmArr)
-    const [phimSearch, setPhimSearch] = useState('Phim')
-    const [rapSearch, setRapSearch] = useState('Phim')
-    const [timeSearch, setTimeSearch] = useState('Phim')
-
-    const pop = usePopOver();
-    const [anchorEl, setAnchorEl] = useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
-
-
-    const list = useList();
     const chiTietPhim = useSelector(state => state.FilmDetailReducer.chiTietPhim)
 
-    console.log(chiTietPhim);
+
+    const grid = useGrid();
+    const clickListener = useClickListener();
+    const list = useList();
+    const btn = useButton();
+
+
+    const [phimSearch, setPhimSearch] = useState('Phim')
+    const [rapSearch, setRapSearch] = useState('Rạp')
+    const [timeSearch, setTimeSearch] = useState('Thời gian')
+    const [openPhim, setOpenPhim] = useState(false);
+    const [openRap, setOpenRap] = useState(false);
+    const [openTime, setOpenTime] = useState(false);
+    const [heThongRapIndex, setHeThongRapIndex] = useState();
+    const [cumRapIndex, setCumRapIndex] = useState();
+    const [lichIndex, setLichIndex] = useState();
+    const [maPhimTimKiem, setMaPhimTimKiem] = useState();
+    const [disabled, setDisabled] = useState(true)
+    const [maLichChieuTimKiem, setMaLichChieuTimKiem] = useState();
+
+
+    const handleSetOpenPhim = () => {
+        setOpenPhim((prev) => !prev);
+    };
+
+    const handleClickAwayPhim = () => {
+        setOpenPhim(false);
+    };
+    const handleSetOpenRap = () => {
+        setOpenRap((prev) => !prev);
+    };
+
+    const handleClickAwayRap = () => {
+        setOpenRap(false);
+    };
+    const handleSetOpenTime = () => {
+        setOpenTime((prev) => !prev);
+    };
+
+    const handleClickAwayTime = () => {
+        setOpenTime(false);
+    };
+
     useEffect(async () => {
         dispatch(getFilmFromApi('GP03'))
-        dispatch(getFilmDetailFromApi(5027))
     }, [])
+    useEffect(() => {
+        dispatch(getFilmDetailFromApi(maPhimTimKiem))
+    }, [maPhimTimKiem])
+
+    if (timeSearch !== 'Thời gian' && disabled == true) { setDisabled(false) }
+    if (timeSearch === 'Thời gian' && disabled == false) { setDisabled(true) }
     const dropDownFilm = () => {
-        
         return (
             <div className={list.root}>
                 <List component="nav" aria-label="main mailbox folders">
                     {
                         filmArr.map((film, index) => {
                             return (
-                                <ListItem
+                                <ListItem key={index}
                                     button
                                     onClick={(event) => {
-                                        handleClose()
                                         setPhimSearch(film.tenPhim)
+                                        setMaPhimTimKiem(film.maPhim)
+                                        setRapSearch('Rạp')
+                                        setTimeSearch('Thời gian')
                                     }}
                                 >
                                     <ListItemText primary={film.tenPhim} />
@@ -83,6 +167,92 @@ export default function FilmList(propsRoute) {
             </div>
         )
     }
+    const dropDownRap = () => {
+        if (phimSearch === 'Phim') {
+            return (
+                <div className={list.root}>
+                    <List component="nav" aria-label="main mailbox folders">
+                        <ListItem >
+                            <ListItemText primary="Vui lòng chọn phim" />
+                        </ListItem>
+                    </List>
+                </div>
+            )
+        } else {
+            return (
+                <div className={list.root}>
+                    <List component="nav" aria-label="main mailbox folders">
+                        {
+                            chiTietPhim.heThongRapChieu?.map((heThongRap, index) => {
+                                return heThongRap.cumRapChieu.map((rap, i) => {
+                                    // console.log(i);
+
+                                    return (
+                                        <ListItem key={i}
+                                            button
+                                            onClick={(event) => {
+                                                setCumRapIndex(i)
+                                                setHeThongRapIndex(index)
+                                                setRapSearch(rap.tenCumRap)
+                                                setTimeSearch('Thời gian')
+                                                // set(film.tenPhim)
+                                            }}
+                                        >
+                                            <ListItemText primary={rap.tenCumRap} />
+                                        </ListItem>
+                                    )
+                                })
+
+                            })
+                        }
+                    </List>
+                </div>
+            )
+        }
+
+    }
+    const dropDownTime = () => {
+        if (rapSearch === 'Rạp') {
+            return (
+                <div className={list.root}>
+                    <List component="nav" aria-label="main mailbox folders">
+                        <ListItem >
+                            <ListItemText primary="Vui lòng chọn rạp" />
+                        </ListItem>
+                    </List>
+                </div>
+            )
+        } else {
+            return (
+                <div className={list.root}>
+                    <List component="nav" aria-label="main mailbox folders">
+                        {
+                            chiTietPhim.heThongRapChieu?.[heThongRapIndex]?.cumRapChieu?.[cumRapIndex]?.lichChieuPhim.map((lich, index) => {
+                                return (
+                                    <ListItem key={index}
+                                        button
+                                        onClick={(event) => {
+                                            // set(film.tenPhim)
+                                            setTimeSearch(lich.ngayChieuGioChieu.replace('T', ' - '))
+                                            setLichIndex(index)
+                                        }}
+                                    >
+                                        <ListItemText primary={`${lich.ngayChieuGioChieu.replace('T', ' - ')} (${lich.tenRap})`} />
+                                    </ListItem>
+                                )
+
+                            })
+                        }
+                    </List>
+                </div>
+            )
+        }
+    }
+    const mangRenderThanhTimKiem = [
+        { title: phimSearch, dropDown: dropDownFilm(), open: openPhim, click: handleSetOpenPhim, away: handleClickAwayPhim },
+        { title: rapSearch, dropDown: dropDownRap(), open: openRap, click: handleSetOpenRap, away: handleClickAwayRap },
+        { title: timeSearch, dropDown: dropDownTime(), open: openTime, click: handleSetOpenTime, away: handleClickAwayTime },
+    ]
     const renderFilm = (i) => {
         return (
             filmArr.slice(i, i + 8).map((film, index) => {
@@ -139,66 +309,57 @@ export default function FilmList(propsRoute) {
             </Slider>
         )
     }
-
-
+    
 
     return (
         <section id="film-list" class="container">
-            <div class="filter container">
-                <div class="row">
-                    <div onClick={handleClick} class="filter-format col-md-3">
-                        <div class="row">
-                            <div class="col-md-10">
-                                <a >{phimSearch}</a>
-                            </div>
-                            <div class="col-md-2">
-                                <i class="fas fa-angle-down"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="filter-format col-md-4">
-                        <div class="row">
-                            <div class="col-md-10">
-                                <a href="#">Rạp</a>
-                            </div>
-                            <div class="col-md-2">
-                                <i class="fas fa-angle-down"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="filter-format col-md-2">
-                        <div class="row">
-                            <div class="col-md-10">
-                                <a href="#">Ngày xem</a>
-                            </div>
-                            <div class="col-md-2">
-                                <i class="fas fa-angle-down"></i>
-                            </div>
-                        </div>
-                    </div>
+            <div class="filter container" style={{ position: 'relative', zIndex: 2 }}> {/* cho postion vào để có thể dùng z index vì slick slider có z index làm che  mất dropdown */}
+                <div className={grid.root}>
+                    <Grid container spacing={0}>
+                        {mangRenderThanhTimKiem.map((item, index) => {
+                            return (
+                                <Grid item xs={3} key={index}>
+                                    <ClickAwayListener onClickAway={item.away}>
+                                        <Grid onClick={item.click} className={clickListener.root} container spacing={3}>
+                                            <Grid className={grid.limitText} item xs={10}>
+                                                <a >{item.title}</a>
+                                            </Grid>
+                                            <Grid item xs={2}>
+                                                <i class="fas fa-angle-down"></i>
+                                            </Grid>
 
-                    <div class="filter-format col-md-3">
-                        <button class="btn btn-success">Mua vé ngay</button>
-                    </div>
+                                            {item.open ? (
+                                                <div className={clickListener.dropdown}>
+                                                    {item.dropDown}
+                                                </div>
+                                            ) : null}
+
+                                        </Grid>
+                                    </ClickAwayListener>
+                                </Grid>
+                            )
+                        })}
+
+
+                        <Grid item xs={3}>
+                            <Grid container spacing={3}>
+                                <Grid className={btn.root} item xs={12}>
+                                    <Button disabled={disabled} >
+                                        <NavLink to={`/chitietphongve/${chiTietPhim.heThongRapChieu?.[heThongRapIndex]?.cumRapChieu?.[cumRapIndex]?.lichChieuPhim?.[lichIndex]?.maLichChieu
+                                            }`}>
+                                            Mua vé ngay
+                                        </NavLink>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
                 </div>
+
+
             </div>
 
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
-            >
-                    {dropDownFilm()}
-            </Popover>
 
 
             {/*  Nav pills  */}
@@ -228,6 +389,6 @@ export default function FilmList(propsRoute) {
                     </div>
                 </div>
             </div>
-        </section>
+        </section >
     )
 }

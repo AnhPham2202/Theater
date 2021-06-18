@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { themPhim } from '../../Redux/Actions/AdminActions';
 import { useDispatch } from 'react-redux';
+import { darkOrange, orange } from '../../Util/var';
 
 
 
@@ -26,11 +27,10 @@ const useButton = makeStyles((theme) => ({
             margin: theme.spacing(1),
             display: 'block',
             width: '50%',
-            background: 'rgba(245, 0, 87, 0.8);',
+            background: orange,
             transition: 'all 0.25s',
             '&:hover': {
-                background: "rgba(245, 0, 87, 0.75);",
-                opacity: '0.8'
+                background: darkOrange,
             },
         },
 

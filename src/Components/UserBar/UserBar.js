@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -59,9 +59,7 @@ const useAvatar = makeStyles((theme) => ({
     },
 }));
 
-function ListItemLink(props) {
-    return <ListItem button component="a" {...props} />;
-}
+
 
 export default function UserBar() {
     const dispatch = useDispatch()
@@ -75,6 +73,10 @@ export default function UserBar() {
         setSelectedIndex(index);
     };
 
+    useEffect(()=> {
+        dispatch(doiGiaoDien(<UserInfo />)) // tránh tình trạng chọn sang tab vé đã đặt đã dispatch lên store r thì out ra các trang khác
+        //khi vào lại thì component hiện lên là vé đã đặt nhưng seleted tab là userInfo 
+    },[])
     return (
         <div className={list.root}>
             <List component="nav" aria-label="main mailbox folders">

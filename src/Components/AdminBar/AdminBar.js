@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -81,6 +81,11 @@ export default function AdminBar() {
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);
     };
+
+    useEffect(()=> {
+        dispatch(doiGiaoDien(<FilmManagement />)) // tránh tình trạng chọn sang tab vé đã đặt đã dispatch lên store r thì out ra các trang khác
+        //khi vào lại thì component hiện lên là vé đã đặt nhưng seleted tab là userInfo 
+    },[])
 
     return (
         <div className={list.root}>

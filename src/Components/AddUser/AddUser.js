@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputLabel from '@material-ui/core/InputLabel';
+import { darkOrange, orange } from '../../Util/var';
 
 
 const ueSelect = makeStyles((theme) => ({
@@ -41,11 +42,10 @@ const useButton = makeStyles((theme) => ({
             margin: theme.spacing(1),
             display: 'block',
             width: '50%',
-            background: 'rgba(245, 0, 87, 0.8);',
+            background: orange,
             transition: 'all 0.25s',
             '&:hover': {
-                background: "rgba(245, 0, 87, 0.75);",
-                opacity: '0.8'
+                background: darkOrange,
             },
         },
 

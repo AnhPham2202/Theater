@@ -154,9 +154,8 @@ export default function Calender() {
   };
   const renderTime = (timeArr) => {
     return timeArr.map((time, index) => {
-      console.log(time);
       return (
-        <span className={btn.root}>
+        <span key={index} className={btn.root}>
           <Button variant="outlined">
             <NavLink className={btn.colorGreen} to={`/chitietphongve/${time.maLichChieu}`}>
               <TodayIcon style={{ marginRight: 2, color: 'black' }} />
@@ -171,7 +170,7 @@ export default function Calender() {
     return theaterFilmArr[brandIndex]?.lstCumRap[filmIndex]?.danhSachPhim.map(
       (item, index) => {
         return (
-          <div className={accordion.root}>
+          <div key={index} className={accordion.root}>
             <Accordion expanded={expanded === index} onChange={handleChange(index)}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}

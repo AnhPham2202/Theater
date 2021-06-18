@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useDispatch } from 'react-redux';
 import { doiMatKhau } from '../../Redux/Actions/UserActions';
-import { pink } from '../../Util/var';
+import { darkOrange, orange, pink } from '../../Util/var';
 
 
 
@@ -27,16 +27,13 @@ const useButton = makeStyles((theme) => ({
     root: {
         '& > *': {
             margin: theme.spacing(1),
-
+            background: orange,
+            color:'white',
             display: 'inline-block',
             width: '50%',
-            // background: 'rgba(245, 0, 87, 0.8);',
-            // transition: 'all 0.25s',
-            // // padding: '0',
-            // '&:hover': {
-            //     background: "rgba(245, 0, 87, 0.75);",
-            //     opacity: '0.8'
-            // },
+            '&:hover': {
+                background: darkOrange,
+            }
         },
 
     },
@@ -121,7 +118,7 @@ export default function PasswordChanging() {
                         <Button onClick={(e) => {
                             e.preventDefault()
                             onSubmit()
-                        }} type="submit" variant="contained" color="secondary">
+                        }} type="submit" variant="contained" >
                             Thay đổi
                         </Button>
                     </div>
