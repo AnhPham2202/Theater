@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import logo from './../../assets/img/logo.png'
 import avatar from './../../assets/img/avatar.png'
 import { useDispatch, useSelector } from 'react-redux'
-import { dangXuat } from '../../Redux/Actions/UserActions'
+import { dangXuat, layThongTinTaiKhoan } from '../../Redux/Actions/UserActions'
 import { makeStyles } from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Button from '@material-ui/core/Button';
@@ -71,6 +71,7 @@ export default function Header() {
     const btn = useButton();
     const list = useList();
     const [open, setOpen] = useState(false);
+    const user = JSON.parse(localStorage.getItem('user'))
 
     const handleClick = () => {
         setOpen((prev) => !prev);
@@ -82,7 +83,10 @@ export default function Header() {
 
 
     let tenDN = useSelector(state => state.UserReducer.tenDangNhap)
-
+    let thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan)
+    useEffect(() => {
+        dispatch(layThongTinTaiKhoan(user?.taiKhoan))
+    }, [])
     let dropDown = () => {
         return (
             <div className={list.root}>
@@ -92,11 +96,14 @@ export default function Header() {
                             <ListItemText primary={tenDN ? 'Thông tin tài khoản' : ''} />
                         </ListItem>
                     </NavLink>
-                    <NavLink to="/admin" >
-                        <ListItem button>
-                            <ListItemText primary="Quản trị / Admin " />
-                        </ListItem>
-                    </NavLink>
+                    {user?.maLoaiNguoiDung === "QuanTri" ? (
+                        <NavLink to="/admin" >
+                            <ListItem button>
+                                <ListItemText primary="Quản trị / Admin " />
+                            </ListItem>
+                        </NavLink>
+                    ) : ''}
+
 
                 </List>
             </div>
@@ -138,18 +145,26 @@ export default function Header() {
                     </ClickAwayListener>
 
                     {/* Đăng ký / đăng xuất */}
-                    <span className={btn.root}>
-                        <Button>
+                    <span className={btn.root}> 
+                    {/* tách làm 2 BUtton chứ k ghi 1 Button rồi cho điều kiện render vào trong vì như v sẽ 
+                    phải để onClick vào thẻ span làm cho lúc click ở viền nút lúc đăng xuất sẽ k handle được function */}
+                        {tenDN == '' ? (
+                            <Button>
+                                < NavLink to='/dangky'>Đăng ký</NavLink>
+                            </Button>
+                        )
+                            : (
+                                <Button onClick={() => dispatch(dangXuat())}>
+                                    <span>Đăng xuất</span>
+                                </Button>
+                            )}
 
-                            {tenDN == '' ?
-                                <NavLink to='/dangky'>Đăng ký</NavLink> : <span onClick={() => dispatch(dangXuat())}>Đăng xuất</span>}
-                        </Button>
                     </span>
 
 
                 </div>
             </div>
 
-        </header>
+        </header >
     )
 }

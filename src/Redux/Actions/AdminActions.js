@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { TOKEN } from '../../Util/var'
 
 export const layPhimPhanTrang = (trangHienTai, soPhanTu, tuKhoa) => {
     let url = ''
@@ -22,14 +23,12 @@ export const layPhimPhanTrang = (trangHienTai, soPhanTu, tuKhoa) => {
 export const xoaPhim = (maPhim) => {
     return async () => {
         try {
-            // ????
-            console.log(123);
+            const TOKEN = localStorage.getItem('t') 
             const result = await axios({
                 url: `https://movie0706.cybersoft.edu.vn/api/QuanLyPhim/XoaPhim?MaPhim=${maPhim}`,
                 method: 'DELETE',
-                headers: { Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVkdGFsazEwMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlF1YW5UcmkiLCJuYmYiOjE2MjI0NjMyNjQsImV4cCI6MTYyMjQ2Njg2NH0.b2sqspzPPc5YVDjc_v8A14i5Hl3v6yOjh2fu3b-LS-A' }
+                headers: { Authorization: 'Bearer ' + TOKEN }
             })
-            console.log(result.data);
         } catch (error) {
             alert(error.response?.data);
         }
@@ -65,11 +64,12 @@ export const chinhSuaPhim = (phim) => {
     console.log('chinhsua');
     try {
         return async (dispatch) => {
+            const TOKEN = localStorage.getItem('t') 
             const result = await axios({
                 url: 'https://movie0706.cybersoft.edu.vn/api/QuanLyPhim/CapNhatPhimUpload',
                 method: 'POST',
                 data: phim,
-                headers: { Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVkdGFsazEwMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlF1YW5UcmkiLCJuYmYiOjE2MjI0NjMyNjQsImV4cCI6MTYyMjQ2Njg2NH0.b2sqspzPPc5YVDjc_v8A14i5Hl3v6yOjh2fu3b-LS-A' }
+                headers: { Authorization: 'Bearer ' + TOKEN }
             })
             console.log('try chinh sua');
         }
@@ -114,10 +114,11 @@ export const layDanhSachNguoiDungPhanTrang = (trangHienTai, soPhanTu, tuKhoa) =>
 export const xoaUser = (taiKhoan) => {
     return async () => {
         try {
+            const TOKEN = localStorage.getItem('t') 
             const result = await axios({
                 url: `https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/XoaNguoiDung?TaiKhoan=${taiKhoan}`,
                 method: 'DELETE',
-                headers: { Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVkdGFsazEwMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlF1YW5UcmkiLCJuYmYiOjE2MjI0NjMyNjQsImV4cCI6MTYyMjQ2Njg2NH0.b2sqspzPPc5YVDjc_v8A14i5Hl3v6yOjh2fu3b-LS-A' }
+                headers: { Authorization: 'Bearer ' + TOKEN}
             })
             alert(result.data);
         } catch (error) {
@@ -129,11 +130,12 @@ export const xoaUser = (taiKhoan) => {
 export const chinhSuaUser = (user) => {
     try {
         return async (dispatch) => {
+            const TOKEN = localStorage.getItem('t') 
             const result = await axios({
                 url: 'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/CapNhatThongTinNguoiDung',
                 method: 'PUT',
                 data: user,
-                headers: { Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVkdGFsazEwMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlF1YW5UcmkiLCJuYmYiOjE2MjI0NjMyNjQsImV4cCI6MTYyMjQ2Njg2NH0.b2sqspzPPc5YVDjc_v8A14i5Hl3v6yOjh2fu3b-LS-A' }
+                headers: { Authorization: 'Bearer ' + TOKEN }
             })
             alert('Thay đổi thông tin thành công')
         }
@@ -146,11 +148,12 @@ export const chinhSuaUser = (user) => {
 export const themNguoiDung = (user) => {
     return async (dispatch) => {
         try {
+            const TOKEN = localStorage.getItem('t') 
             const result = await axios({
                 url: 'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/ThemNguoiDung',
                 method: 'POST',
                 data: user,
-                headers: { Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVkdGFsazEwMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlF1YW5UcmkiLCJuYmYiOjE2MjI0NjMyNjQsImV4cCI6MTYyMjQ2Njg2NH0.b2sqspzPPc5YVDjc_v8A14i5Hl3v6yOjh2fu3b-LS-A' }
+                headers: { Authorization: 'Bearer ' + TOKEN }
             })
             alert('Thêm người dùng thành công');
         } catch (error) {

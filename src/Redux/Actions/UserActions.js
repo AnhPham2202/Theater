@@ -52,18 +52,20 @@ export const dangXuat = () => {
         })
         localStorage.removeItem('user')
         localStorage.removeItem('t')
+        history.push('/')
     }
 }
 
-export const datVe = (info, token) => {
+export const datVe = (info) => {
     return async (dispatch) => {
         try {
+            const TOKEN = localStorage.getItem('t') 
             const result = await axios({
 
                 url: 'https://movie0706.cybersoft.edu.vn/api/QuanLyDatVe/DatVe',
                 method: 'POST',
                 data: info,
-                headers: { 'Authorization': 'Bearer ' + token }
+                headers: { 'Authorization': 'Bearer ' + TOKEN }
             })
             // dispatch({
             //     type: 'RESET_MANG_GHE',
@@ -95,7 +97,6 @@ export const layThongTinTaiKhoan = (taiKhoan) => {
 }
 
 export const doiMatKhau = (taiKhoan, matKhau, matKhauMoi, setErrorMatKhau, setHelperMatKhau) => {
-    const token = localStorage.getItem('t')
     const layThongTinUser = async () => {
         const user = await axios({
             url: `https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP03&tuKhoa=${taiKhoan}`,
@@ -103,10 +104,11 @@ export const doiMatKhau = (taiKhoan, matKhau, matKhauMoi, setErrorMatKhau, setHe
         })
         const doiMatKhau = async () => {
             try {
+                const TOKEN = localStorage.getItem('t') 
                 const result = await axios({
                     url: `https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/CapNhatThongTinNguoiDung`,
                     method: 'PUT',
-                    headers: { 'Authorization': 'Bearer ' + token },
+                    headers: { 'Authorization': 'Bearer ' + TOKEN },
                     data: { ...user.data[0], matKhau: matKhauMoi, maNhom: 'GP03' }
                 })
                 alert('Đổi mật khẩu thành công');
@@ -149,14 +151,15 @@ export const doiChucNang = (component) => {
     }
 }
 
-export const capNhatThongTinNguoiDung = (newInfo, token) => {
+export const capNhatThongTinNguoiDung = (newInfo) => {
     return async (dispatch) => {
         try {
+            const TOKEN = localStorage.getItem('t') 
             const result = await axios({
                 url: 'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/CapNhatThongTinNguoiDung',
                 method: 'PUT',
                 data: newInfo,
-                headers: { 'Authorization': 'Bearer ' + token }
+                headers: { 'Authorization': 'Bearer ' + TOKEN }
             })
             console.log(result.data);
             alert('ok')

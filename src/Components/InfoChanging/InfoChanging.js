@@ -59,7 +59,6 @@ export default function InfoChanging() {
     const form = useForm();
     const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem('user'))
-    const token = localStorage.getItem('t')
     const thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan)
     let { taiKhoan, hoTen, email, soDT, matKhau, maNhom } = thongTinTaiKhoan
     const [emailInput, setMail] = useState(email)
@@ -99,7 +98,7 @@ export default function InfoChanging() {
             maLoaiNguoiDung: 'KhachHang',
             hoTen: hoTenInput
         }
-        dispatch(capNhatThongTinNguoiDung(thongTinTaiKhoanMoi, token))
+        dispatch(capNhatThongTinNguoiDung(thongTinTaiKhoanMoi))
     }
     return (
         <List className={list.root} style={{ margin: '0px' }}>

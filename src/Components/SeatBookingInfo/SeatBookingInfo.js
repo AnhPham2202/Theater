@@ -265,7 +265,7 @@ export default function SeatBookingInfo(props) {
 
                 <Button variant="contained" disabled={disabled} onClick={() => {
                     dispatch(thayDoiHeaderProgress(1))
-                    dispatch(datVe(thongTinDatVe, user.accessToken))
+                    dispatch(datVe(thongTinDatVe))
                 }}>Mua Vé</Button>
             </div>
 
