@@ -1,9 +1,8 @@
 import axios from 'axios'
-import { TOKEN } from '../../Util/var'
 
 export const layPhimPhanTrang = (trangHienTai, soPhanTu, tuKhoa) => {
     let url = ''
-    if (tuKhoa === undefined) {
+    if (tuKhoa === undefined || tuKhoa === '') {
         url = `https://movie0706.cybersoft.edu.vn/api/QuanLyPhim/LayDanhSachPhimPhanTrang?maNhom=GP03&soTrang=${trangHienTai}&soPhanTuTrenTrang=${soPhanTu}`
     } else {
         url = `https://movie0706.cybersoft.edu.vn/api/QuanLyPhim/LayDanhSachPhimPhanTrang?maNhom=GP03&tenPhim=${tuKhoa}&soTrang=${trangHienTai}&soPhanTuTrenTrang=${soPhanTu}`
@@ -94,7 +93,7 @@ export const chinhSuaPhim = (phim) => {
 
 export const layDanhSachNguoiDungPhanTrang = (trangHienTai, soPhanTu, tuKhoa) => {
     let url = ''
-    if (tuKhoa === undefined) {
+    if (tuKhoa === undefined || tuKhoa === '') {
         url = `https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/TimKiemNguoiDungPhanTrang?MaNhom=GP01&soTrang=${trangHienTai}&soPhanTuTrenTrang=${soPhanTu}`
     } else {
         url = `https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/TimKiemNguoiDungPhanTrang?MaNhom=GP03&tuKhoa=${tuKhoa}&soTrang=${trangHienTai}&soPhanTuTrenTrang=${soPhanTu}`
@@ -158,6 +157,59 @@ export const themNguoiDung = (user) => {
             alert('Thêm người dùng thành công');
         } catch (error) {
             alert(error.response?.data);
+        }
+    }
+}
+
+export const layThongTinHeThongRap = () => {
+    return async (dispatch) => {
+        try {
+            const result = await axios({
+                url: 'https://movie0706.cybersoft.edu.vn/api/QuanLyRap/LayThongTinHeThongRap',
+                method: 'GET',
+            })
+            dispatch({
+                type: 'SET_MANG_HE_THONG_RAP',
+                mangHeThongRap: result.data
+            })
+        } catch (error) {
+            console.log(error.response?.data)
+        }
+    }
+}
+
+export const layThongTinCumRapTheoHeThong = (heThongRap) => {
+    return async (dispatch) => {
+        try {
+            const result = await axios({
+                url: `https://movie0706.cybersoft.edu.vn/api/QuanLyRap/LayThongTinCumRapTheoHeThong?maHeThongRap=${heThongRap}`,
+                method: 'GET',
+            })
+            dispatch({
+                type: 'SET_MANG_CUM_RAP',
+                mangCumRap: result.data
+            })
+        } catch (error) {
+            console.log(error.response?.data)
+        }
+    }
+}
+
+export const taoLichChieu = (thongTinLichChieu) => {
+    return async (dispatch) => {
+        try {
+            console.log(thongTinLichChieu)
+            const TOKEN = localStorage.getItem('t')
+
+            const result = axios({
+                url: 'https://movie0706.cybersoft.edu.vn/api/QuanLyDatVe/TaoLichChieu',
+                method: 'POST',
+                headers: { Authorization: 'Bearer ' + TOKEN },
+                data: thongTinLichChieu
+            })
+            alert('Tạo lịch chiếu thành công !!!')
+        } catch (error) {
+            console.log(error.response.data)
         }
     }
 }

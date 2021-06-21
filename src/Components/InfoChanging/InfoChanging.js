@@ -14,6 +14,7 @@ import InboxIcon from '@material-ui/icons/Inbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import { useDispatch, useSelector } from 'react-redux';
 import { capNhatThongTinNguoiDung, layThongTinTaiKhoan } from '../../Redux/Actions/UserActions';
+import { darkOrange, orange } from '../../Util/var';
 
 const useList = makeStyles((theme) => ({
     root: {
@@ -22,25 +23,19 @@ const useList = makeStyles((theme) => ({
     },
 }));
 
-function ListItemLink(props) {
-    return <ListItem button component="a" {...props} />;
-}
 const useButton = makeStyles((theme) => ({
     root: {
         '& > *': {
             margin: theme.spacing(1),
+            background: orange,
+            color:'white',
+            display: 'inline-block',
             width: '50%',
-
+            '&:hover': {
+                background: darkOrange,
+            }
         },
-        // display: 'block',
-        // background: 'rgba(245, 0, 87, 0.8);',
-        // transition: 'all 0.25s',
-        // padding: '0',
-        // margin: theme.spacing(1),
-        // '&:hover': {
-        //     background: "rgba(245, 0, 87, 0.75);",
-        //     opacity: '0.8'
-        // },
+
     },
 
 }));

@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { useDispatch, useSelector } from 'react-redux';
-import { chinhSuaPhim, layPhimPhanTrang, xoaPhim } from '../../Redux/Actions/AdminActions';
+import { chinhSuaPhim, layPhimPhanTrang, layThongTinCumRapTheoHeThong, layThongTinHeThongRap, taoLichChieu, xoaPhim } from '../../Redux/Actions/AdminActions';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
 import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
@@ -24,6 +24,12 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { pink } from '../../Util/var';
 import Tooltip from '@material-ui/core/Tooltip';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputLabel from '@material-ui/core/InputLabel';
+import { toNumber } from 'lodash';
+
 
 const columns = [
     { id: 'tacVuAdmin-col', label: 'Tác vụ', minWidth: 70, maxWidth: 70 },
@@ -55,11 +61,34 @@ const columns = [
     {
         id: 'rate-col',
         label: 'Đánh giá',
-        minWidth: 100,
+        minWidth: 90,
         align: 'center',
     },
 ];
 
+const useDateTime = makeStyles((theme) => ({
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
+    },
+}));
+
+
+const useSelect = makeStyles((theme) => ({
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+        width: '100%'
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+}));
 
 const useTable = makeStyles({
     root: {
@@ -74,6 +103,14 @@ const useTable = makeStyles({
         maxHeight: 440,
 
     },
+    tacVu: {
+        display: 'flex',
+        maxWidth: 100,
+        width: 100,
+        padding: 0,
+        flexWrap: 'wrap',
+        justifyContent: 'center'
+    }
 
 });
 
@@ -117,13 +154,32 @@ const useText = makeStyles((theme) => ({
             margin: theme.spacing(1),
             width: '50%',
         },
-    }, 
+    },
 }));
 
 export default function FilmManagement() {
     const rows = [];
+    const today = new Date()
+    let currentTime = '';
+
+    (function formatDefaultDate() { // để hàm ở đây để có dữ liệu current trước khi tạo state time
+        let year = today.getFullYear();
+        let month = today.getMonth() + 1;
+        let date = today.getDate();
+        let hour = today.getHours();
+        let minute = today.getMinutes();
+        if (month < 10) { month = '0' + month }
+        if (date < 10) { date = '0' + date }
+        if (hour < 10) { hour = '0' + hour }
+        if (minute < 10) { minute = '0' + minute }
+        currentTime = `${year}-${month}-${date}T${hour}:${minute}`
+        // return `${year}-${month}-${date}T${hour}:${minute}`
+    })()
+
     const dispatch = useDispatch()
     const thongTinPhimPhanTrang = useSelector(state => state.AdminReducer.phimPhanTrang)
+    const mangHeThongRap = useSelector(state => state.AdminReducer.mangHeThongRap)
+    const mangCumRap = useSelector(state => state.AdminReducer.mangCumRap)
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     const [maPhim, setMaPhim] = useState()
     const [biDanh, setBiDanh] = useState()
@@ -136,15 +192,54 @@ export default function FilmManagement() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [open, setOpen] = useState(false);
+    const [openSchedule, setOpenSchedule] = useState(false);
     const [scroll, setScroll] = useState('paper');
     const [itemIndex, setItemIndex] = useState(0);
     const [search, setSearch] = useState();
+    const [giaVe, setGiaVe] = useState();
+    const [heThongRap, setHeThongRap] = useState();
+    const [cumRapIndex, setCumRapIndex] = useState();
+    const [maRap, setMaRap] = useState();
+    const [time, setTime] = useState(currentTime);
 
     const table = useTable();
     const form = useForm();
     const text = useText();
+    const select = useSelect();
+    const dateTime = useDateTime();
+    
+    const formatNgayChieuGioChieu = () => {
+        let gioChieu = time.split('T')[1] + ':00'
+        let ngayChieu = time.split('T')[0]
+        ngayChieu = ngayChieu.replaceAll('-', '/')
+        ngayChieu = ngayChieu.split('/')[2] + '/' + ngayChieu.split('/')[1] + '/' + ngayChieu.split('/')[0]
+        return ngayChieu + ' ' + gioChieu
+    }
+    // console.log(formatNgayChieuGioChieu())
+    const thongTinLichChieu = {
+        maPhim,
+        ngayChieuGioChieu: formatNgayChieuGioChieu(),
+        maRap,
+        giaVe,
+    }
     // working on 
 
+    // const handleSelectChange = (event) => {
+    //     setUser({ ...user, maLoaiNguoiDung: event.target.value })
+    // };
+    // console.log(`${time.replace('T', ' ').replace('-', '/').replace('-', '/')}:00`)
+    const handleGiaVe = (e) => {
+        setGiaVe(Number(e.target.value))
+    }
+    const handleHeThongRap = (e) => {
+        setHeThongRap(e.target.value)
+    }
+    const handleCumRap = (e) => {
+        setCumRapIndex(e.target.value)
+    }
+    const handleMaRap = (e) => {
+        setMaRap(Number(e.target.value))
+    }
 
 
     const onSubmit = () => {
@@ -167,13 +262,18 @@ export default function FilmManagement() {
         dispatch(chinhSuaPhim(formData))
 
     }
-    console.log(ngayKhoiChieu);
+    const handleClickOpenSchedule = (scrollType) => () => {
+        setOpenSchedule(true);
+        setScroll(scrollType);
+    };
 
     const handleClickOpen = (scrollType) => () => {
         setOpen(true);
         setScroll(scrollType);
     };
-
+    const handleCloseSchedule = () => {
+        setOpenSchedule(false);
+    };
     const handleClose = () => {
         setOpen(false);
     };
@@ -220,16 +320,21 @@ export default function FilmManagement() {
         let { value } = e.target
         setSearch(value)
     }
+
+
     const descriptionElementRef = React.useRef(null);
+    // useEffect(() => {setTime(currentTime)}, [])
     useEffect(() => {
         dispatch(layPhimPhanTrang(page + 1, rowsPerPage, search))
+        dispatch(layThongTinHeThongRap())
+        dispatch(layThongTinCumRapTheoHeThong(heThongRap))
         if (open) {
             const { current: descriptionElement } = descriptionElementRef;
             if (descriptionElement !== null) {
                 descriptionElement.focus();
             }
         }
-        if (open == true) { // check vì nếu không check khi submit thì setOpen của Mui Dialog sẽ set để tắt form thì sẽ chạy lại cả useEffect thì nó sẽ set lại tên cũ đang có sẵn trước khi kịp update lên api
+        if (open || openSchedule) { // check vì nếu không check khi submit thì setOpen của Mui Dialog sẽ set để tắt form thì sẽ chạy lại cả useEffect thì nó sẽ set lại tên cũ đang có sẵn trước khi kịp update lên api
             setMaPhim(thongTinPhimPhanTrang.items?.[itemIndex].maPhim)
             setBiDanh(thongTinPhimPhanTrang.items?.[itemIndex].biDanh)
             setTenPhim(thongTinPhimPhanTrang.items?.[itemIndex].tenPhim)
@@ -240,10 +345,117 @@ export default function FilmManagement() {
         }
 
 
-    }, [page, rowsPerPage, open, itemIndex, search])
-
+    }, [page, rowsPerPage, open, openSchedule, itemIndex, search, heThongRap, cumRapIndex])
+    console.log(maPhim)
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+    const addSchedule = () => {
+        return (
+            <Dialog
+                open={openSchedule}
+                onClose={handleCloseSchedule}
+                scroll={scroll}
+                aria-labelledby="scroll-dialog-title"
+                aria-describedby="scroll-dialog-description"
+            >
+                <DialogTitle id="scroll-dialog-title">Tạo lịch chiếu</DialogTitle>
+                <DialogContent dividers={scroll === 'paper'}>
+                    <DialogContentText
+                        id="scroll-dialog-description"
+                        ref={descriptionElementRef}
+                        tabIndex={-1}>
+                        <form onSubmit={(e) => {
+                            e.preventDefault()
+                            onSubmit()
+                        }} className={form.root} noValidate autoComplete="off">
+                            <TextField
+                                id="maPhim"
+                                label="Mã phim"
+                                defaultValue='Loading...'
+                                value={maPhim}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                            <FormControl className={select.formControl}>
+                                <InputLabel htmlFor="age-native-simple">Giá vé</InputLabel>
+                                <Select
+                                    native
+                                    onChange={handleGiaVe}
+                                    inputProps={{
+                                        name: 'giaVe',
+                                        id: 'giaVe',
+                                    }}
+                                >
+                                    <option aria-label="None" value="" />
+                                    <option value='75000'>75.000đ</option>
+                                    <option value='100000'>100.000đ</option>
+                                    <option value='125000'>125.000đ</option>
+                                    <option value='150000'>150.000đ</option>
+                                    <option value='200000'>200.000đ</option>
+                                </Select>
+                            </FormControl>
+                            <FormControl className={select.formControl}>
+                                <InputLabel htmlFor="age-native-simple">Hệ thống rạp</InputLabel>
+                                <Select
+                                    native
+                                    onChange={handleHeThongRap}
+                                >
+                                    <option aria-label="None" value="" />
+                                    {mangHeThongRap.map((heThongRap, index) => {
+                                        return <option value={heThongRap.maHeThongRap}>{heThongRap.tenHeThongRap}</option>
+                                    })}
+                                </Select>
+                            </FormControl>
+                            <FormControl className={select.formControl}>
+                                <InputLabel htmlFor="age-native-simple">Cụm rạp</InputLabel>
+                                <Select
+                                    native
+                                    onChange={handleCumRap}
+                                >
+                                    <option aria-label="None" value="" />
+                                    {mangCumRap.map((cumRap, index) => {
+                                        return <option value={index}>{cumRap.tenCumRap}</option>
+                                    })}
+                                </Select>
+                            </FormControl>
+                            <FormControl className={select.formControl}>
+                                <InputLabel htmlFor="age-native-simple">Rạp</InputLabel>
+                                <Select
+                                    native
+                                    onChange={handleMaRap}
+                                >
+                                    <option aria-label="None" value="" />
+                                    {mangCumRap[cumRapIndex]?.danhSachRap.map((rap, index) => {
+                                        return <option value={rap.maRap}>{rap.tenRap}</option>
+                                    })}
+                                </Select>
+                            </FormControl>
+                            <TextField
+                                id="datetime-local"
+                                label="Next appointment"
+                                type="datetime-local"
+                                defaultValue={currentTime}
+                                value={time}
+                                onChange={(e) => setTime(e.target.value)}
+                                className={dateTime.textField}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </form>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleCloseSchedule()} color="primary">
+                        Hủy bỏ
+                    </Button>
+                    <Button onClick={() => dispatch(taoLichChieu(thongTinLichChieu))} color="primary">
+                        Thay đổi
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        )
+    }
 
     const formFilmInfo = () => {
         return (
@@ -368,7 +580,11 @@ export default function FilmManagement() {
                         </IconButton>
                     </Tooltip>
                 </label>
-                <label onClick={() => console.log(3)} htmlFor="icon-button-file">
+
+                <label onClick={() => {
+                    setItemIndex(itemIndex)
+                    handleClickOpenSchedule('paper')()
+                }} htmlFor="icon-button-file">
                     <Tooltip title="Thêm lịch chiếu">
                         <IconButton aria-label="add film" component="span">
                             <AddToPhotosIcon />
@@ -376,6 +592,7 @@ export default function FilmManagement() {
                     </Tooltip>
                 </label>
                 {formFilmInfo()}
+                {addSchedule()}
             </Fragment>
         )
     }
@@ -417,7 +634,7 @@ export default function FilmManagement() {
                         {rows.map((row, i) => {
                             return (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                    <TableCell key={i} >
+                                    <TableCell key={i} className={table.tacVu} >
                                         {row.tacVu}
                                     </TableCell>
                                     <TableCell key={i} >

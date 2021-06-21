@@ -15,7 +15,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { darkOrange, orange } from '../../Util/var';
 
 
-const ueSelect = makeStyles((theme) => ({
+const useSelect = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
@@ -60,15 +60,13 @@ const useList = makeStyles((theme) => ({
     },
 }));
 
-function ListItemLink(props) {
-    return <ListItem button component="a" {...props} />;
-}
+
 export default function AddUser() {
     const dispatch = useDispatch()
     const form = useForm();
     const list = useList();
     const btn = useButton();
-    const select = ueSelect();
+    const select = useSelect();
 
     // const [hoTen, setHoten] = useState()
     // const [taiKhoan, setTaiKhoan] = useState()
@@ -100,8 +98,6 @@ export default function AddUser() {
     const onSubmit = (e) => {
         e.preventDefault()
         dispatch(themNguoiDung(user))
-
-        console.log(user);
     }
     return (
         <List className={list.root} style={{ margin: '0px' }}>
