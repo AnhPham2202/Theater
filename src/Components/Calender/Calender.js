@@ -53,6 +53,10 @@ const useButton = makeStyles((theme) => ({
     '& > *': {
       margin: theme.spacing(0.5),
     },
+    '& a': {
+      borderBottom: 'none !important',
+      opacity: '1 !important'
+    }
   },
   colorGreen: {
     color: 'green',
@@ -77,7 +81,7 @@ const useAvatar = makeStyles((theme) => ({
 
 export default function Calender() {
   const accordion = useAccordion();
-  const grid = useGrid();
+  // const grid = useGrid();
   const btn = useButton()
   const avatar = useAvatar();
   const [expanded, setExpanded] = useState(false);
@@ -88,68 +92,47 @@ export default function Calender() {
 
 
 
-  let theaterArr = useSelector((state) => state.TheaterListReducer.theaterArr);
+  // let theaterArr = useSelector((state) => state.TheaterListReducer.theaterArr);
   let theaterFilmArr = useSelector(
     (state) => state.TheaterListReducer.theaterFilmArr
   );
-  const theaterInfo = useSelector(state => state.TheaterListReducer.theaterInfo)
-  // let [theater, setTheater] = useState("CineStar");
+  // const theaterInfo = useSelector(state => state.TheaterListReducer.theaterInfo)
   let [filmIndex, setfilmIndex] = useState(0);
   let [brandIndex, setBrandIndex] = useState(0);
   const dispatch = useDispatch();
 
-  //useEffect đã bỏ vô nhưng chưa biết để làm gì 
-  // useEffect(() => {
-  //   dispatch(getTheaterFromApi(theater));
-  // }, [theater]);
-
 
   useEffect(() => {
-    // dispatch(getLogoFromApi())
     dispatch(getTheaterFilmFromApi());
   }, []);
 
-  let render = () => {
-    return (
-      <div className="total-table container ">
-        <div className="row table-height">
-          <div className="col-md-1">{renderLogo()}</div>
-          <div className="col-md-5">
-            <div className="tab-content">
-              <div className="tab-pane container active ">
-                {renderTheater()}
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6">{renderFilm()}</div>
-        </div>
-      </div>
-    );
-  };
 
   let renderLogo = () => {
-    let logo = [];
-    theaterFilmArr.map((theaterInfo, index) => {
-      logo.push(
-        <li key={index} className="left-col nav-item ">
-          <a
-            onClick={() => {
-              // setTheater(theaterInfo.maHeThongRap);
-              setBrandIndex(index)
-              setExpanded(false)
-            }}
-            className="nav-link "
-            data-toggle="tab"
-            href={`#calender${index + 1}`}
-          ><Button>
-              <img src={theaterInfo.logo} />
-            </Button>
-          </a>
-        </li>
-      );
-    });
     return (
-      <ul className="nav nav-tabs">{logo}</ul>
+      <ul className="nav nav-tabs">{
+        theaterFilmArr.map((theaterInfo, index) => {
+          return (
+            <li key={index} className="left-col nav-item ">
+              <a 
+                onClick={() => {
+                  // setTheater(theaterInfo.maHeThongRap);
+                  setfilmIndex(0);
+                  setBrandIndex(index)
+                  setExpanded(false)
+                  console.log(index, brandIndex)
+                  
+                }}
+                className="nav-link"
+                data-toggle="tab"
+              // href={`#calender${index + 1}`}
+              ><Button  className={index !== brandIndex ? 'theater-choosing' : ''}>
+                  <img src={theaterInfo.logo} />
+                </Button>
+              </a>
+            </li>
+          );
+        })};
+      </ul>
     );
   };
   const renderTime = (timeArr) => {
@@ -210,15 +193,13 @@ export default function Calender() {
   let renderTheater = () => {
     return theaterFilmArr[brandIndex]?.lstCumRap.map((cumRap, i) => {
       return (
-        <a
-          onClick={() => {
-            setfilmIndex(i);
-            setExpanded(false)
-
-          }}
+        <a onClick={() => {
+          setfilmIndex(i);
+          setExpanded(false)
+        }}
           key={i}
           style={{ cursor: "pointer" }}
-          className="row"
+          className={i !== filmIndex ? "row theater-choosing" : "row"}
         >
           <div className="col-md-3">
             <img src={theaterFilmArr[brandIndex]?.logo} />
@@ -230,15 +211,13 @@ export default function Calender() {
             <Typography variant="body2" className="theater-address" display="block" gutterBottom>
               {cumRap.diaChi}
             </Typography>
-            <NavLink
-
-              onClick={() => {
-                dispatch(setThongTinRapTheoIndex({
-                  name: cumRap.tenCumRap,
-                  address: cumRap.diaChi,
-                  firstRender: i
+            <NavLink onClick={() => {
+              dispatch(setThongTinRapTheoIndex({
+                name: cumRap.tenCumRap,
+                address: cumRap.diaChi,
+                firstRender: i
               }))
-              }}
+            }}
 
               to={`/theaterdetail/${theaterFilmArr[brandIndex].maHeThongRap}`} className="theater-detail">[Chi Tiết]</NavLink>
           </div>
@@ -247,5 +226,21 @@ export default function Calender() {
     })
   };
 
-  return <section id="calender">{render()}</section>;
+  return (
+    <section id="calender">
+      <div className="total-table container ">
+        <div className="row table-height">
+          <div className="col-md-1">{renderLogo()}</div>
+          <div className="col-md-5">
+            <div className="tab-content">
+              <div className="tab-pane container active ">
+                {renderTheater()}
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">{renderFilm()}</div>
+        </div>
+      </div>
+    </section>
+    )
 }

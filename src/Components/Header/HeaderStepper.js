@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import logo from './../../assets/img/logo.png'
 import { useDispatch, useSelector } from 'react-redux'
-import { dangXuat } from '../../Redux/Actions/UserActions'
+import { dangXuat, layThongTinTaiKhoan } from '../../Redux/Actions/UserActions'
 import { makeStyles } from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Button from '@material-ui/core/Button';
@@ -86,8 +86,12 @@ const useButton = makeStyles((theme) => ({
 
 export default function HeaderStepper() {
     const dispatch = useDispatch()
+    const user = JSON.parse(localStorage.getItem('user'))
+
     const step = useSelector(state => state.TicketBookingReducer.stepper)
     let tenDN = useSelector(state => state.UserReducer.tenDangNhap)
+    let thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan[0])
+
     const dropdown = useDropDown();
     const btn = useButton();
     const list = useList();
@@ -116,6 +120,9 @@ export default function HeaderStepper() {
         setActiveStep(step)
     }, [step])
 
+    useEffect(() => {
+        dispatch(layThongTinTaiKhoan(user?.taiKhoan))
+    }, [])
 
     let dropDown = () => {
         return (
@@ -126,11 +133,14 @@ export default function HeaderStepper() {
                             <ListItemText primary={tenDN ? 'Thông tin tài khoản' : ''} />
                         </ListItem>
                     </NavLink>
-                    <NavLink to="/admin" >
-                        <ListItem button>
-                            <ListItemText primary="Quản trị / Admin " />
-                        </ListItem>
-                    </NavLink>
+                    {thongTinTaiKhoan?.maLoaiNguoiDung === "QuanTri" ? (
+                        <NavLink to="/admin" >
+                            <ListItem button>
+                                <ListItemText primary="Quản trị / Admin " />
+                            </ListItem>
+                        </NavLink>
+                    ) : ''}
+
 
                 </List>
             </div>

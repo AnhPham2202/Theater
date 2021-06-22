@@ -80,17 +80,20 @@ export const datVe = (info) => {
 export const layThongTinTaiKhoan = (taiKhoan) => {
     return async (dispatch) => {
         try {
+            console.log(taiKhoan)
+
             const result = await axios({
-                url: 'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/ThongTinTaiKhoan',
-                method: 'POST',
-                data: taiKhoan
+                url: `https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP03&tuKhoa=${taiKhoan}`,
+                method: 'GET',
             })
+
             dispatch({
                 type: 'SET_THONG_TIN_TAI_KHOAN',
                 thongTinTaiKhoan: result.data
             })
         } catch (error) {
-            console.log(error.response?.data);
+            console.log(456)
+            console.log(error.response.data);
         }
 
     }

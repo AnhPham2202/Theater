@@ -58,7 +58,6 @@ const useButton = makeStyles((theme) => ({
         '& > *': {
             margin: theme.spacing(0),
             borderRadius: '50px !important',
-
         },
 
 
@@ -66,28 +65,30 @@ const useButton = makeStyles((theme) => ({
 }));
 
 export default function Header() {
+    const user = JSON.parse(localStorage.getItem('user'))
     const dispatch = useDispatch()
+    const tenDN = useSelector(state => state.UserReducer.tenDangNhap)
+    const thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan[0])
+    const [open, setOpen] = useState(false);
+
     const dropdown = useDropDown();
     const btn = useButton();
     const list = useList();
-    const [open, setOpen] = useState(false);
-    const user = JSON.parse(localStorage.getItem('user'))
 
+    
     const handleClick = () => {
         setOpen((prev) => !prev);
     };
-
     const handleClickAway = () => {
         setOpen(false);
     };
 
 
-    let tenDN = useSelector(state => state.UserReducer.tenDangNhap)
-    let thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan)
+   
     useEffect(() => {
         dispatch(layThongTinTaiKhoan(user?.taiKhoan))
     }, [])
-    let dropDown = () => {
+    const dropDown = () => {
         return (
             <div className={list.root}>
                 <List component="nav" aria-label="secondary mailbox folders">
@@ -96,7 +97,7 @@ export default function Header() {
                             <ListItemText primary={tenDN ? 'Thông tin tài khoản' : ''} />
                         </ListItem>
                     </NavLink>
-                    {user?.maLoaiNguoiDung === "QuanTri" ? (
+                    {thongTinTaiKhoan?.maLoaiNguoiDung === "QuanTri" ? (
                         <NavLink to="/admin" >
                             <ListItem button>
                                 <ListItemText primary="Quản trị / Admin " />
@@ -130,7 +131,7 @@ export default function Header() {
                         onClickAway={handleClickAway}
                     >
                         <div style={{ display: 'inline-block' }} className={dropdown.root}>
-                            <Button className={btn.root} type="button" onClick={handleClick}>
+                            <Button variant="outlined" className="mr-2" type="button" onClick={handleClick}>
 
                                 {tenDN == '' ? <NavLink to="/dangnhap" > Đăng nhập</NavLink>
                                     : `Hi, ${tenDN}`}
@@ -149,12 +150,12 @@ export default function Header() {
                     {/* tách làm 2 BUtton chứ k ghi 1 Button rồi cho điều kiện render vào trong vì như v sẽ 
                     phải để onClick vào thẻ span làm cho lúc click ở viền nút lúc đăng xuất sẽ k handle được function */}
                         {tenDN == '' ? (
-                            <Button>
+                            <Button className variant="outlined">
                                 < NavLink to='/dangky'>Đăng ký</NavLink>
                             </Button>
                         )
                             : (
-                                <Button onClick={() => dispatch(dangXuat())}>
+                                <Button variant="outlined" onClick={() => dispatch(dangXuat())}>
                                     <span>Đăng xuất</span>
                                 </Button>
                             )}

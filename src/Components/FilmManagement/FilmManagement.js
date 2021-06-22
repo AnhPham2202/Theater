@@ -105,11 +105,7 @@ const useTable = makeStyles({
     },
     tacVu: {
         display: 'flex',
-        maxWidth: 100,
-        width: 100,
-        padding: 0,
-        flexWrap: 'wrap',
-        justifyContent: 'center'
+        flexDirection: 'column'
     }
 
 });

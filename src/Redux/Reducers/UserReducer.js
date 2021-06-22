@@ -11,7 +11,7 @@ const stateDefault = {
     tenDangNhap: tenDN,
     component: <UserInfo />,
     componentChucNang: <GeneralInfo />,
-    thongTinTaiKhoan: {}
+    thongTinTaiKhoan: []
 }
 
 export default  (state=stateDefault, action) =>{

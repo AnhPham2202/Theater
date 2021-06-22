@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import logo from './../../assets/img/logo-slogan.png'
 import bg from './../../assets/img/bg2.jpg'
 import { useFormik } from 'formik';
@@ -9,6 +9,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { NavLink } from "react-router-dom";
+import { history } from '../../App';
+
+
+
 
 
 const useBox = makeStyles((theme) => ({
@@ -24,16 +28,16 @@ const useBox = makeStyles((theme) => ({
 
 const cssNavlink = makeStyles((theme) => ({
     root: {
-        '& a':{
+        '& a': {
             color: 'white',
             textDecoration: 'underline'
         }
     },
 }));
- 
 
 
 export default function SignIn() {
+
     const dispatch = useDispatch()
     const box = useBox()
     const link = cssNavlink()
@@ -46,6 +50,13 @@ export default function SignIn() {
             dispatch(dangNhap(values))
         },
     });
+    useEffect(() => { // bỏ vào đây để chỉ render 1 lần alert, nếu bỏ ngoài thì sẽ render 2 lần (k tốt cho UX)
+        const user = JSON.parse(localStorage.getItem('user'))
+        if (user) {
+            alert(`Bạn đã đăng nhập với tài khoản ${user.taiKhoan}`)
+            history.push('/')
+        }
+    }, [])
 
     return (
         <div id="sign-in" style={{ backgroundImage: `url(${bg})`, padding: 50 }}>
@@ -61,8 +72,8 @@ export default function SignIn() {
 
                         <Typography align="center" variant="caption" display="block" gutterBottom>Đăng nhập để được nhiều ưu đãi, mua vé và bảo mật thông tin!</Typography>
                         <button type="submit" className="btn btn-primary signin-btn mb-3">Đăng nhập</button>
-                        <Typography className={link.root} align="center" variant="body2" display="block" gutterBottom>Nếu bạn chưa có tài khoản, hãy đăng kí tài khoản 
-                        <NavLink to='/dangky' > tại đây</NavLink>
+                        <Typography className={link.root} align="center" variant="body2" display="block" gutterBottom>Nếu bạn chưa có tài khoản, hãy đăng kí tài khoản
+                            <NavLink to='/dangky' > tại đây</NavLink>
                         </Typography>
 
                     </form>

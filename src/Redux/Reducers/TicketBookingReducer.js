@@ -11,6 +11,7 @@ export default (state = initialState, action) => {
             return { ...state }
         }
         case 'THEM_GHE': {
+            if (state.mangGheDangDat.length == 6) { alert ('Bạn không thể đặt quá 6 ghế !!!'); return { ...state }} 
             let mangGheCapNhat = [...state.mangGheDangDat]
             let index = mangGheCapNhat.findIndex(ghe => ghe.maGhe === action.gheDangChon.maGhe)
             if (index !== -1) {

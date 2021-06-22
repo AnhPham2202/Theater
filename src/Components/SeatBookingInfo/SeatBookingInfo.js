@@ -13,12 +13,35 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Box from '@material-ui/core/Box';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid'
 
 import zalo from '../../assets/img/zalopay.jpg'
 import cc from '../../assets/img/visapay.png'
 import atm from '../../assets/img/atmpay.png'
 import paypoo from '../../assets/img/paypoopay.png'
 import { useState } from 'react';
+import { darkOrange, orange } from '../../Util/var';
+
+const useGrid = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+        borderBottom: '1px solid #e9e9e9',
+        overflow: 'hidden', // do xuất hiện scroll bar ngang nhưng k ảnh hưởng nhiều (chỉ do padding) nên hide đi
+        '& .MuiTypography-caption': {
+            padding: '15px 0',
+            color: darkOrange,
+            fontWeight: 800,
+            fontStyle: 'italic'
+        }
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    },
+}));
+
 const useField = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -65,17 +88,6 @@ const useText = makeStyles({
         borderBottom: '1px solid #e9e9e9',
         padding: '15px 0',
     },
-    lineFormatWithColor: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        '& .MuiTypography-caption': {
-            borderBottom: '1px solid #e9e9e9',
-            padding: '15px 0',
-            color: 'orange',
-            fontWeight: 800,
-            fontStyle: 'italic'
-        }
-    },
     warningText: {
         fontSize: 12,
         textAlign: 'center',
@@ -92,7 +104,7 @@ export default function SeatBookingInfo(props) {
     const stepper = useSelector(state => state.TicketBookingReducer.stepper)
     const { malichchieu } = props.match.params
     const dispatch = useDispatch()
-    const textField = useField();
+    const grid = useGrid();
     const text = useText()
     const btn = useButton();
     const [value, setValue] = useState('zalo');
@@ -221,41 +233,41 @@ export default function SeatBookingInfo(props) {
                 {renderTongTien()}
             </div>
             {renderThongTinPhimVaRap()}
-
-            <div className={text.lineFormatWithColor}>
-                <Typography variant="caption" display="block" gutterBottom>
-                    Ghế thường: {renderGheDangDat()}
-                </Typography>
-                <Typography variant="caption" display="block" gutterBottom>
-
-                    {renderTongTienTheoLoaiGhe('Thuong')} đ
-                </Typography>
-
+            <div className={grid.root}>
+                <Grid container spacing={3}>
+                    <Grid item xs={9}>
+                        <Typography variant="caption" display="block" gutterBottom>
+                        Ghế thường: {renderGheDangDat()}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Typography variant="caption" display="block" gutterBottom>
+                        {renderTongTienTheoLoaiGhe('Thuong')} đ
+                        </Typography>
+                    </Grid>
+                </Grid>
             </div>
-            <div className={text.lineFormatWithColor}>
-                <Typography variant="caption" display="block" gutterBottom>
-                    Ghế VIP: {renderGheDangDatVIP()}
-                </Typography>
-                <Typography variant="caption" display="block" gutterBottom>
-                    {renderTongTienTheoLoaiGhe('Vip')} đ
-                </Typography>
+            <div className={grid.root}>
+                <Grid container spacing={3}>
+                    <Grid item xs={9}>
+                        <Typography variant="caption" display="block" gutterBottom>
+                            Ghế VIP: {renderGheDangDatVIP()}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Typography variant="caption" display="block" gutterBottom>
+                            {renderTongTienTheoLoaiGhe('Vip')} đ
+                        </Typography>
+                    </Grid>
+                </Grid>
             </div>
-
-            {/* <div className={textField.root}>
-                <TextField disabled={disabled} id="standard-basic" label="E-mail" />
-                <TextField disabled={disabled} id="standard-basic" label="Số điện thoại" />
-            </div> */}
 
             <div className={text.lineFormat} >
-                {/* <Typography variant="body2" display="block" gutterBottom>
-                </Typography> */}
                 {radioHinhThucThanhToan()}
-
             </div>
 
             <div className={btn.root}>
                 <div className={text.warningText}>
-
                     <Typography variant="caption" display="block" >
                         <ErrorIcon style={{ fontSize: 16, color: 'red' }} /> Vé đã mua không thể đổi hoặc hoàn tiền
                         Mã vé sẽ được gửi qua tin nhắn <span className="highlight">ZMS (tin nhắn Zalo)</span> và <span className="highlight">Email</span> đã nhập.
