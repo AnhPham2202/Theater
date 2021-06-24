@@ -10,10 +10,22 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { NavLink } from "react-router-dom";
 import { history } from '../../App';
+import Button from '@material-ui/core/Button';
+import { darkOrange, orange } from '../../Util/var';
 
 
-
-
+const useButton = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        background: orange,
+        transition: 'all 0.25s',
+        color: 'white',
+        marginBottom: 16,
+        '&:hover': {
+            background: darkOrange,
+        },
+    },
+}));
 
 const useBox = makeStyles((theme) => ({
     root: {
@@ -41,6 +53,8 @@ export default function SignIn() {
     const dispatch = useDispatch()
     const box = useBox()
     const link = cssNavlink()
+    const btn = useButton()
+
     const formik = useFormik({
         initialValues: {
             taiKhoan: '',
@@ -71,7 +85,7 @@ export default function SignIn() {
                             value={formik.values.passWord} />
 
                         <Typography align="center" variant="caption" display="block" gutterBottom>Đăng nhập để được nhiều ưu đãi, mua vé và bảo mật thông tin!</Typography>
-                        <button type="submit" className="btn btn-primary signin-btn mb-3">Đăng nhập</button>
+                        <Button type="submit" className={btn.root}>Đăng nhập</Button>
                         <Typography className={link.root} align="center" variant="body2" display="block" gutterBottom>Nếu bạn chưa có tài khoản, hãy đăng kí tài khoản
                             <NavLink to='/dangky' > tại đây</NavLink>
                         </Typography>

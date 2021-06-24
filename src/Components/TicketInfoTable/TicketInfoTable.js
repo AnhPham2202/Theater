@@ -7,7 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { layThongTinTaiKhoan } from '../../Redux/Actions/UserActions';
+import { layThongTinGheDaDat, layThongTinTaiKhoan } from '../../Redux/Actions/UserActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from '@material-ui/core/styles';
 import { compose, spacing, palette } from '@material-ui/system';
@@ -25,6 +25,10 @@ const useTable = makeStyles({
         '& th': {
             color: 'white !important'
         }
+    }, 
+    gheSo: {
+        maxWidth: 130,
+        width:140 //do set max là 130 mà layout lại ra trên 130, nên set 1 cái width để nó đọc cái maxWidth để set 130 vào
     }
 });
 const useBox = makeStyles({
@@ -50,15 +54,17 @@ export default function TicketInfoTable() {
     const table = useTable();
     const box = useBox();
     const dispatch = useDispatch()
-    const thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan)
+    const thongTinGheDaDat = useSelector(state => state.UserReducer.thongTinGheDaDat)
     let user = JSON.parse(localStorage.getItem('user'))
     let taiKhoan = {
         taiKhoan: user.taiKhoan
     }
+    console.log(thongTinGheDaDat)
     useEffect(() => {
-        dispatch(layThongTinTaiKhoan(taiKhoan))
+        
+        dispatch(layThongTinGheDaDat(taiKhoan))
     }, [])
-    thongTinTaiKhoan.thongTinDatVe?.map((item, index) => {
+    thongTinGheDaDat.map((item, index) => {
         let gheArr = item.danhSachGhe.map((ghe, i) => {
             return (
                 <Box key={i} color="white" bgcolor={pink} p={1}>
@@ -93,7 +99,7 @@ export default function TicketInfoTable() {
                             <TableCell align="center">{row.ngayDat}</TableCell>
                             <TableCell align="center">{row.thoiLuongPhim}</TableCell>
                             <TableCell align="center">{row.tenHeThongRap}</TableCell>
-                            <TableCell >
+                            <TableCell className={table.gheSo} >
                                 {row.tenGhe.map((ghe, index) => {
                                     return (
                                         <Box key={index} className={box.root}>

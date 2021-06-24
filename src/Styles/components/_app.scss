@@ -1,0 +1,53 @@
+#app{
+    background-image: url("./../../assets/img/app-background.jpg");
+    color: white;
+    padding: 200px 0;
+    height: 700px;
+    font-weight: bold;
+    background: {
+        repeat: no-repeat;
+        position: center;
+    }
+    a{
+        text-decoration: underline;
+        color: white;
+    }
+    h1, p{
+        margin-bottom: 30px;
+    }
+    button{
+        background-color: $m-color;
+        margin-bottom: 10px; 
+        font-weight: bold;
+    }
+    .container{
+        padding: 0 50px;
+    }
+    .app-right-content{
+        padding: 0 100px;
+        position: relative;
+        .slide{
+            position: absolute;
+            width: 188px;
+            top: 0;
+            padding-top: 10px;
+            padding-left: 6px;
+            img{
+                width: 177px;
+                height: 382px;
+                
+            }
+        }
+        img{
+            height: 400px;
+            width: 189px;
+        }
+        .mob{
+            width: 177px;
+            border-radius: 17px;
+            height: 382px;
+            overflow: hidden;
+        }
+    }
+}
+   

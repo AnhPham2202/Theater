@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { NavLink } from "react-router-dom";
+import Button from '@material-ui/core/Button';
+import { darkOrange, orange } from '../../Util/var';
 
 
 const useBox = makeStyles((theme) => ({
@@ -19,6 +21,18 @@ const useBox = makeStyles((theme) => ({
         margin: '0px auto',
         padding: '30px 0'
 
+    },
+}));
+
+const useButton = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        background: orange,
+        transition: 'all 0.25s',
+        color: 'white',
+        '&:hover': {
+            background: darkOrange,
+        },
     },
 }));
 
@@ -36,6 +50,7 @@ export default function SignUp() {
     const dispatch = useDispatch()
 
     const box = useBox()
+    const btn = useButton()
     const link = cssNavlink()
     const formik = useFormik({
         initialValues: {
@@ -86,8 +101,8 @@ export default function SignUp() {
                             value={formik.values.phone} />
                         <Typography align="center" variant="caption" display="block" gutterBottom>Đăng ký để được nhiều ưu đãi, mua vé và bảo mật thông tin!</Typography>
 
-                        <button type="submit" className="btn signup-btn">Đăng ký</button>
-                        <button type="button" className="btn btn-primary signin-btn">Đăng nhập</button>
+                        <Button type="submit" className={btn.root}>Đăng ký</Button>
+                        {/* <button type="button" className="btn btn-primary signin-btn">Đăng nhập</button> */}
                         <Box className="mt-3">
                             <Typography className={link.root} align="center" variant="body2" display="block" gutterBottom>Nếu bạn đã có tài khoản , hãy
                                 <NavLink to='/dangnhap' > đăng nhập tại đây</NavLink>

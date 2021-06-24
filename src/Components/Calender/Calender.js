@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import {
-  getLogoFromApi,
   getTheaterFilmFromApi,
 } from "../../Redux/Actions/FilmAction";
 
@@ -13,7 +12,6 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import { Button } from "@material-ui/core";
 import TodayIcon from '@material-ui/icons/Today';
 import Avatar from '@material-ui/core/Avatar';
@@ -80,27 +78,18 @@ const useAvatar = makeStyles((theme) => ({
 
 
 export default function Calender() {
+  const theaterFilmArr = useSelector((state) => state.TheaterListReducer.theaterFilmArr);
+  const dispatch = useDispatch();
   const accordion = useAccordion();
-  // const grid = useGrid();
   const btn = useButton()
   const avatar = useAvatar();
   const [expanded, setExpanded] = useState(false);
+  const [filmIndex, setfilmIndex] = useState(0);
+  const [brandIndex, setBrandIndex] = useState(0);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-
-
-
-  // let theaterArr = useSelector((state) => state.TheaterListReducer.theaterArr);
-  let theaterFilmArr = useSelector(
-    (state) => state.TheaterListReducer.theaterFilmArr
-  );
-  // const theaterInfo = useSelector(state => state.TheaterListReducer.theaterInfo)
-  let [filmIndex, setfilmIndex] = useState(0);
-  let [brandIndex, setBrandIndex] = useState(0);
-  const dispatch = useDispatch();
-
 
   useEffect(() => {
     dispatch(getTheaterFilmFromApi());
@@ -113,19 +102,18 @@ export default function Calender() {
         theaterFilmArr.map((theaterInfo, index) => {
           return (
             <li key={index} className="left-col nav-item ">
-              <a 
+              <a
                 onClick={() => {
                   // setTheater(theaterInfo.maHeThongRap);
                   setfilmIndex(0);
                   setBrandIndex(index)
                   setExpanded(false)
                   console.log(index, brandIndex)
-                  
+
                 }}
                 className="nav-link"
                 data-toggle="tab"
-              // href={`#calender${index + 1}`}
-              ><Button  className={index !== brandIndex ? 'theater-choosing' : ''}>
+              ><Button className={index !== brandIndex ? 'theater-choosing' : ''}>
                   <img src={theaterInfo.logo} />
                 </Button>
               </a>
@@ -242,5 +230,5 @@ export default function Calender() {
         </div>
       </div>
     </section>
-    )
+  )
 }

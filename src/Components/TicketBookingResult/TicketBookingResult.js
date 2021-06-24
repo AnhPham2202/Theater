@@ -117,12 +117,12 @@ export default function TicketBookingResult() {
     const mangGheDangDat = useSelector(state => state.TicketBookingReducer.mangGheDangDat)
     const { diaChi, gioChieu, hinhAnh, ngayChieu, tenCumRap, tenPhim, tenRap } = thongTinChiTietPhongVe.thongTinPhim ?? ''
     const user = JSON.parse(localStorage.getItem('user')).taiKhoan
+
     const card = useCard();
     const grid = useGrid();
     const box = useBox()
     const avatar = useAvatar()
 
-    // const [expanded, setExpanded] = useState(false);
     let tongTien = 0
 
    
@@ -130,12 +130,13 @@ export default function TicketBookingResult() {
         return mangGheDangDat.map((ghe, index) => {
             tongTien += ghe.giaVe
             return (
-                <Box className={box.root} color="text.primary">
+                <Box key={index} className={box.root} color="text.primary">
                     {ghe.tenGhe}
                 </Box>
             )
         })
     }
+
     return (
         <Container style={{ padding: "80px 0" }} maxWidth="sm">
             <Card className={card.root}>

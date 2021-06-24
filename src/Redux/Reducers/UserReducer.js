@@ -11,7 +11,8 @@ const stateDefault = {
     tenDangNhap: tenDN,
     component: <UserInfo />,
     componentChucNang: <GeneralInfo />,
-    thongTinTaiKhoan: []
+    thongTinTaiKhoan: [],
+    thongTinGheDaDat: [],
 }
 
 export default  (state=stateDefault, action) =>{
@@ -34,8 +35,14 @@ export default  (state=stateDefault, action) =>{
         }
         case 'SET_THONG_TIN_TAI_KHOAN': {
             state.thongTinTaiKhoan = action.thongTinTaiKhoan
+            console.log(state.thongTinTaiKhoan)
+
             return {...state}
 
+        }
+        case 'SET_GHE_DAT': {
+            state.thongTinGheDaDat = action.thongTinGheDaDat
+            return {...state}
         }
         
     }

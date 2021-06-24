@@ -68,14 +68,14 @@ export default function Header() {
     const user = JSON.parse(localStorage.getItem('user'))
     const dispatch = useDispatch()
     const tenDN = useSelector(state => state.UserReducer.tenDangNhap)
-    const thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan[0])
+    const thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan)
     const [open, setOpen] = useState(false);
 
     const dropdown = useDropDown();
     const btn = useButton();
     const list = useList();
 
-    
+
     const handleClick = () => {
         setOpen((prev) => !prev);
     };
@@ -84,10 +84,11 @@ export default function Header() {
     };
 
 
-   
     useEffect(() => {
-        dispatch(layThongTinTaiKhoan(user?.taiKhoan))
-    }, [])
+        dispatch(layThongTinTaiKhoan(tenDN))
+    }, [tenDN])
+
+
     const dropDown = () => {
         return (
             <div className={list.root}>
@@ -97,15 +98,13 @@ export default function Header() {
                             <ListItemText primary={tenDN ? 'Thông tin tài khoản' : ''} />
                         </ListItem>
                     </NavLink>
-                    {thongTinTaiKhoan?.maLoaiNguoiDung === "QuanTri" ? (
+                    {thongTinTaiKhoan?.[0]?.maLoaiNguoiDung === "QuanTri" ? (
                         <NavLink to="/admin" >
                             <ListItem button>
                                 <ListItemText primary="Quản trị / Admin " />
                             </ListItem>
                         </NavLink>
                     ) : ''}
-
-
                 </List>
             </div>
         )
@@ -146,8 +145,8 @@ export default function Header() {
                     </ClickAwayListener>
 
                     {/* Đăng ký / đăng xuất */}
-                    <span className={btn.root}> 
-                    {/* tách làm 2 BUtton chứ k ghi 1 Button rồi cho điều kiện render vào trong vì như v sẽ 
+                    <span className={btn.root}>
+                        {/* tách làm 2 BUtton chứ k ghi 1 Button rồi cho điều kiện render vào trong vì như v sẽ 
                     phải để onClick vào thẻ span làm cho lúc click ở viền nút lúc đăng xuất sẽ k handle được function */}
                         {tenDN == '' ? (
                             <Button className variant="outlined">

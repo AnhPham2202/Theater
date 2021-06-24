@@ -5,6 +5,7 @@ import Carousel from '../../Components/Carousel/Carousel'
 import FilmList from '../../Components/FilmList/FilmList'
 import News from '../../Components/News/News'
 import ShadowLine from '../../Components/ShadowLine/ShadowLine'
+import Apps from '../../Components/Apps/Apps'
 
 export default function Home(propsRoute) {
     
@@ -16,6 +17,7 @@ export default function Home(propsRoute) {
             <Calender />
             <ShadowLine/>
             <News/>
+            <Apps />
         </div>
     )
 }

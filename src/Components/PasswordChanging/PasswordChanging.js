@@ -53,23 +53,27 @@ export default function PasswordChanging() {
     const list = useList();
     const btn = useButton();
     const user = JSON.parse(localStorage.getItem('user'))
+    
     const [errorMatKhau, setErrorMatKhau] = useState(false)
     const [errorNhapLai, setErrorNhapLai] = useState(false)
     const [helperMatKhau, setHelperMatKhau] = useState('')
     const [helperNhapLai, setHelperNhapLai] = useState('')
 
-    const [thongTinMatKhau, setThongTinMatKhau] = useState({
+    let [thongTinMatKhau, setThongTinMatKhau] = useState({
         matKhau: '',
         matKhauMoi: '',
         matKhauNhapLai: ''
-    })
-
+    }) //tạo ra cái state thay vì Obj vì Obj thì nếu render lại thì nó sẽ quay về giá trị cũ 
+    
     const handleChange = (e) => {
         let { id, value } = e.target
         thongTinMatKhau[id] = value
+        //phần này tương tự setState (vẫn ok khi gán bth) 
     }
 
+
     const onSubmit = () => {
+        console.log(thongTinMatKhau)
         if (thongTinMatKhau.matKhauMoi !== thongTinMatKhau.matKhauNhapLai) {
             setErrorNhapLai(true)
             setHelperNhapLai('Vui lòng nhập đúng mật khẩu mới')

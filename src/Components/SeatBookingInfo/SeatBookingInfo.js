@@ -42,18 +42,6 @@ const useGrid = makeStyles((theme) => ({
     },
 }));
 
-const useField = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-            // margin: theme.spacing(1),
-            marginBottom: 5,
-            width: '100%',
-        },
-        '& .MuiFormLabel-root': {
-            fontSize: 14
-        }
-    },
-}));
 const useButton = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -99,17 +87,20 @@ const useText = makeStyles({
 });
 
 export default function SeatBookingInfo(props) {
+    const dispatch = useDispatch()
+    const { malichchieu } = props.match.params
+    const user = JSON.parse(localStorage.getItem('user'))
+
     const thongTinChiTietPhongVe = useSelector(state => state.TicketBookingReducer.thongTinChiTietPhongVe)
     const mangGheDangDat = useSelector(state => state.TicketBookingReducer.mangGheDangDat)
     const stepper = useSelector(state => state.TicketBookingReducer.stepper)
-    const { malichchieu } = props.match.params
-    const dispatch = useDispatch()
+
     const grid = useGrid();
     const text = useText()
     const btn = useButton();
+
     const [value, setValue] = useState('zalo');
     const [disabled, setDisabled] = useState(true);
-    const user = JSON.parse(localStorage.getItem('user'))
     const thongTinDatVe = {
         maLichChieu: malichchieu,
         danhSachVe: [],
@@ -190,9 +181,7 @@ export default function SeatBookingInfo(props) {
                 giaVe: gheDangChon.giaVe,
             })
             if (gheDangChon.loaiGhe === 'Thuong') {
-                return (
-                    `${gheDangChon.tenGhe}, `
-                )
+                return `${gheDangChon.tenGhe}, `
             }
         })
     }
@@ -208,9 +197,7 @@ export default function SeatBookingInfo(props) {
     const renderGheDangDatVIP = () => {
         return mangGheDangDat.map((gheDangChon) => {
             if (gheDangChon.loaiGhe === 'Vip') {
-                return (
-                    `${gheDangChon.tenGhe}, `
-                )
+                return `${gheDangChon.tenGhe}, `
             }
         })
     }

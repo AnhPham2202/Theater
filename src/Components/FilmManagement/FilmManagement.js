@@ -28,7 +28,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputLabel from '@material-ui/core/InputLabel';
-import { toNumber } from 'lodash';
 
 
 const columns = [
@@ -156,9 +155,8 @@ const useText = makeStyles((theme) => ({
 export default function FilmManagement() {
     const rows = [];
     const today = new Date()
-    let currentTime = '';
 
-    (function formatDefaultDate() { // để hàm ở đây để có dữ liệu current trước khi tạo state time
+    const formatDefaultDate = () => {
         let year = today.getFullYear();
         let month = today.getMonth() + 1;
         let date = today.getDate();
@@ -168,9 +166,8 @@ export default function FilmManagement() {
         if (date < 10) { date = '0' + date }
         if (hour < 10) { hour = '0' + hour }
         if (minute < 10) { minute = '0' + minute }
-        currentTime = `${year}-${month}-${date}T${hour}:${minute}`
-        // return `${year}-${month}-${date}T${hour}:${minute}`
-    })()
+        return `${year}-${month}-${date}T${hour}:${minute}`
+    }
 
     const dispatch = useDispatch()
     const thongTinPhimPhanTrang = useSelector(state => state.AdminReducer.phimPhanTrang)
@@ -196,14 +193,17 @@ export default function FilmManagement() {
     const [heThongRap, setHeThongRap] = useState();
     const [cumRapIndex, setCumRapIndex] = useState();
     const [maRap, setMaRap] = useState();
-    const [time, setTime] = useState(currentTime);
+    const [time, setTime] = useState(formatDefaultDate());
+
+    const [triggerUseEffect, setTriggerUseEffect] = useState(false); // để khi nhấn vào các nút thay đổi thông tin thì load lại API, để k phải reload toàn bộ trang để thay đổi thông tin 
+
 
     const table = useTable();
     const form = useForm();
     const text = useText();
     const select = useSelect();
     const dateTime = useDateTime();
-    
+
     const formatNgayChieuGioChieu = () => {
         let gioChieu = time.split('T')[1] + ':00'
         let ngayChieu = time.split('T')[0]
@@ -211,31 +211,15 @@ export default function FilmManagement() {
         ngayChieu = ngayChieu.split('/')[2] + '/' + ngayChieu.split('/')[1] + '/' + ngayChieu.split('/')[0]
         return ngayChieu + ' ' + gioChieu
     }
-    // console.log(formatNgayChieuGioChieu())
     const thongTinLichChieu = {
         maPhim,
         ngayChieuGioChieu: formatNgayChieuGioChieu(),
         maRap,
         giaVe,
     }
-    // working on 
 
-    // const handleSelectChange = (event) => {
-    //     setUser({ ...user, maLoaiNguoiDung: event.target.value })
-    // };
-    // console.log(`${time.replace('T', ' ').replace('-', '/').replace('-', '/')}:00`)
-    const handleGiaVe = (e) => {
-        setGiaVe(Number(e.target.value))
-    }
-    const handleHeThongRap = (e) => {
-        setHeThongRap(e.target.value)
-    }
-    const handleCumRap = (e) => {
-        setCumRapIndex(e.target.value)
-    }
-    const handleMaRap = (e) => {
-        setMaRap(Number(e.target.value))
-    }
+
+
 
 
     const onSubmit = () => {
@@ -255,9 +239,23 @@ export default function FilmManagement() {
         for (let key in phimChinhSua) {
             formData.append(key, phimChinhSua[key])
         }
-        dispatch(chinhSuaPhim(formData))
+        dispatch(chinhSuaPhim(formData, triggerUseEffect, setTriggerUseEffect))
 
     }
+
+    const handleGiaVe = (e) => {
+        setGiaVe(Number(e.target.value))
+    }
+    const handleHeThongRap = (e) => {
+        setHeThongRap(e.target.value)
+    }
+    const handleCumRap = (e) => {
+        setCumRapIndex(e.target.value)
+    }
+    const handleMaRap = (e) => {
+        setMaRap(Number(e.target.value))
+    }
+
     const handleClickOpenSchedule = (scrollType) => () => {
         setOpenSchedule(true);
         setScroll(scrollType);
@@ -274,7 +272,6 @@ export default function FilmManagement() {
         setOpen(false);
     };
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -283,44 +280,18 @@ export default function FilmManagement() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
-    const handleTenPhim = (event) => {
-        setTenPhim(event.target.value)
-    }
-
-    const handleBiDanh = (event) => {
-        setBiDanh(event.target.value)
-    }
-
-    const handleTrailer = (event) => {
-        setTrailer(event.target.value)
-    }
-
-    const handleMoTa = (event) => {
-        setMoTa(event.target.value)
-    }
-
-    const handleNgayKhoiChieu = (event) => {
-        setNgayKhoiChieu(event.target.value)
-    }
-
-    const handleDanhGia = (event) => {
-        setDanhGia(event.target.value)
-    }
-
-    const handleHinhAnh = (event) => {
-        setHinhAnh(event.target.files[0])
-    }
 
     const handleSeach = (e) => {
         let { value } = e.target
         setSearch(value)
     }
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
+
 
 
     const descriptionElementRef = React.useRef(null);
-    // useEffect(() => {setTime(currentTime)}, [])
     useEffect(() => {
+        console.log(123)
         dispatch(layPhimPhanTrang(page + 1, rowsPerPage, search))
         dispatch(layThongTinHeThongRap())
         dispatch(layThongTinCumRapTheoHeThong(heThongRap))
@@ -341,8 +312,10 @@ export default function FilmManagement() {
         }
 
 
-    }, [page, rowsPerPage, open, openSchedule, itemIndex, search, heThongRap, cumRapIndex])
-    console.log(maPhim)
+    }, [page, rowsPerPage, open, openSchedule, itemIndex, search, heThongRap, cumRapIndex, triggerUseEffect])
+    useEffect(() => {
+        setPage(0)
+    }, [search])
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     const addSchedule = () => {
         return (
@@ -398,7 +371,7 @@ export default function FilmManagement() {
                                 >
                                     <option aria-label="None" value="" />
                                     {mangHeThongRap.map((heThongRap, index) => {
-                                        return <option value={heThongRap.maHeThongRap}>{heThongRap.tenHeThongRap}</option>
+                                        return <option key={index} value={heThongRap.maHeThongRap}>{heThongRap.tenHeThongRap}</option>
                                     })}
                                 </Select>
                             </FormControl>
@@ -410,7 +383,7 @@ export default function FilmManagement() {
                                 >
                                     <option aria-label="None" value="" />
                                     {mangCumRap.map((cumRap, index) => {
-                                        return <option value={index}>{cumRap.tenCumRap}</option>
+                                        return <option key={index} value={index}>{cumRap.tenCumRap}</option>
                                     })}
                                 </Select>
                             </FormControl>
@@ -422,7 +395,7 @@ export default function FilmManagement() {
                                 >
                                     <option aria-label="None" value="" />
                                     {mangCumRap[cumRapIndex]?.danhSachRap.map((rap, index) => {
-                                        return <option value={rap.maRap}>{rap.tenRap}</option>
+                                        return <option key={index} value={rap.maRap}>{rap.tenRap}</option>
                                     })}
                                 </Select>
                             </FormControl>
@@ -430,7 +403,7 @@ export default function FilmManagement() {
                                 id="datetime-local"
                                 label="Next appointment"
                                 type="datetime-local"
-                                defaultValue={currentTime}
+                                defaultValue={formatDefaultDate()}
                                 value={time}
                                 onChange={(e) => setTime(e.target.value)}
                                 className={dateTime.textField}
@@ -445,14 +418,15 @@ export default function FilmManagement() {
                     <Button onClick={() => handleCloseSchedule()} color="primary">
                         Hủy bỏ
                     </Button>
-                    <Button onClick={() => dispatch(taoLichChieu(thongTinLichChieu))} color="primary">
+                    <Button onClick={() => {
+                        dispatch(taoLichChieu(thongTinLichChieu))
+                    }} color="primary">
                         Thay đổi
                     </Button>
                 </DialogActions>
             </Dialog>
         )
     }
-
     const formFilmInfo = () => {
         return (
             <Dialog
@@ -487,21 +461,21 @@ export default function FilmManagement() {
                                 label="Bí danh"
                                 defaultValue='Loading...'
                                 value={biDanh}
-                                onChange={handleBiDanh}
+                                onChange={(event) => setMaPhim(event.target.value)}
                             />
                             <TextField
                                 id="tenPhim"
                                 label="Tên phim"
                                 defaultValue='Loading...'
                                 value={tenPhim}
-                                onChange={handleTenPhim}
+                                onChange={(event) => setTenPhim(event.target.value)}
                             />
                             <TextField
                                 id="ngayKhoiChieu"
                                 label="Ngày khởi chiếu"
                                 defaultValue='Loading...'
                                 value={ngayKhoiChieu?.replace('T', ' ')}
-                                onChange={handleNgayKhoiChieu}
+                                onChange={(event) => setNgayKhoiChieu(event.target.value)}
                             />
                             <TextField
                                 id="trailer"
@@ -509,14 +483,14 @@ export default function FilmManagement() {
                                 defaultValue='Loading...'
                                 className={form.width100}
                                 value={trailer}
-                                onChange={handleTrailer}
+                                onChange={(event) => setTrailer(event.target.value)}
                             />
                             <TextField
                                 id="hinhAnh"
                                 label="Hình ảnh"
                                 type="file"
                                 className={form.width100}
-                                onChange={handleHinhAnh}
+                                onChange={(event) => setHinhAnh(event.target.files[0])}
                             />
                             <TextField
                                 id="moTa"
@@ -524,7 +498,7 @@ export default function FilmManagement() {
                                 defaultValue='Loading...'
                                 className={form.width100}
                                 value={moTa}
-                                onChange={handleMoTa}
+                                onChange={(event) => setMoTa(event.target.value)}
                                 multiline
                             />
                             <TextField
@@ -533,7 +507,7 @@ export default function FilmManagement() {
                                 defaultValue='Loading...'
                                 className={form.width100}
                                 value={danhGia}
-                                onChange={handleDanhGia}
+                                onChange={(event) => setDanhGia(event.target.value)}
                             />
                             {/* Để tạo ra type submit cho nút thay đổi ngoài form */}
                             <button onClick={handleClose} style={{ display: 'none' }} type='submit'></button>
@@ -558,7 +532,7 @@ export default function FilmManagement() {
     const tacVu = (maPhim, itemIndex) => {
         return (
             <Fragment>
-                <label onClick={() => dispatch(xoaPhim(maPhim))} htmlFor="icon-button-file">
+                <label onClick={() => dispatch(xoaPhim(maPhim, triggerUseEffect, setTriggerUseEffect))} htmlFor="icon-button-file">
                     <Tooltip title="Xóa phim">
                         <IconButton aria-label="delete film" component="span">
                             <DeleteIcon />

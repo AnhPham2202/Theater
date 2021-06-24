@@ -13,6 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Button from '@material-ui/core/Button';
 import { darkOrange, orange } from '../../Util/var';
+import { history } from '../../App';
 
 
 const useButton = makeStyles((theme) => ({
@@ -28,13 +29,14 @@ const useButton = makeStyles((theme) => ({
                 background: darkOrange,
             },
         },
-        '& .MuiButton-root.Mui-disabled':{
+        '& .MuiButton-root.Mui-disabled': {
             background: 'gray',
         },
-        '& a':{
+        '& a': {
             color: 'white !important'
         }
     },
+   
 
 }));
 
@@ -232,7 +234,6 @@ export default function FilmList(propsRoute) {
                                     <ListItem key={index}
                                         button
                                         onClick={(event) => {
-                                            // set(film.tenPhim)
                                             setTimeSearch(lich.ngayChieuGioChieu.replace('T', ' - '))
                                             setLichIndex(index)
                                         }}
@@ -248,11 +249,7 @@ export default function FilmList(propsRoute) {
             )
         }
     }
-    const mangRenderThanhTimKiem = [
-        { title: phimSearch, dropDown: dropDownFilm(), open: openPhim, click: handleSetOpenPhim, away: handleClickAwayPhim },
-        { title: rapSearch, dropDown: dropDownRap(), open: openRap, click: handleSetOpenRap, away: handleClickAwayRap },
-        { title: timeSearch, dropDown: dropDownTime(), open: openTime, click: handleSetOpenTime, away: handleClickAwayTime },
-    ]
+
     const renderFilm = (i) => {
         return (
             filmArr.slice(i, i + 8).map((film, index) => {
@@ -271,14 +268,9 @@ export default function FilmList(propsRoute) {
                                 </Typography>
 
                             </div>
-                            {/* <Typography variant="body2"  gutterBottom>
-                                    120 phút
-                                </Typography> */}
-
                             <NavLink to={`/filmdetail/${film.maPhim}`}>
                                 <button class="btn btn-danger">MUA VÉ</button>
                             </NavLink>
-
                         </div>
                     </div>
                 )
@@ -290,12 +282,12 @@ export default function FilmList(propsRoute) {
 
     const renderCarousel = () => {
         let num = Math.floor(filmArr.length / 8);
+        let filmCarouselArr = []
+
         if (filmArr.length % 8 !== 0) {
             num += 1
         }
 
-
-        let filmCarouselArr = []
         for (let i = 0; i < num; i++) {
             filmCarouselArr.push(
                 <div class="list-line-1">
@@ -309,8 +301,12 @@ export default function FilmList(propsRoute) {
             </Slider>
         )
     }
-    
 
+    const mangRenderThanhTimKiem = [
+        { title: phimSearch, dropDown: dropDownFilm(), open: openPhim, click: handleSetOpenPhim, away: handleClickAwayPhim },
+        { title: rapSearch, dropDown: dropDownRap(), open: openRap, click: handleSetOpenRap, away: handleClickAwayRap },
+        { title: timeSearch, dropDown: dropDownTime(), open: openTime, click: handleSetOpenTime, away: handleClickAwayTime },
+    ]
     return (
         <section id="film-list" class="container">
             <div class="filter container" style={{ position: 'relative', zIndex: 2 }}> {/* cho postion vào để có thể dùng z index vì slick slider có z index làm che  mất dropdown */}
@@ -344,24 +340,21 @@ export default function FilmList(propsRoute) {
                         <Grid item xs={3}>
                             <Grid container spacing={3}>
                                 <Grid className={btn.root} item xs={12}>
-                                    <Button disabled={disabled} >
-                                        <NavLink to={`/chitietphongve/${chiTietPhim.heThongRapChieu?.[heThongRapIndex]?.cumRapChieu?.[cumRapIndex]?.lichChieuPhim?.[lichIndex]?.maLichChieu
-                                            }`}>
-                                            Mua vé ngay
-                                        </NavLink>
+                                    {/* Dùng button rồi push do dùng Navlink bên trong Button gây ra onClick (href) phải vào chữ mua vé 
+                                    (được nằm trong navlink) mới vào đc link, nếu bấm ở rìa button thì sẽ k có onClick */}
+                                    <Button onClick={() => history.push(`/chitietphongve/${chiTietPhim.heThongRapChieu?.[heThongRapIndex]?.cumRapChieu?.[cumRapIndex]?.lichChieuPhim?.[lichIndex]?.maLichChieu}`)} disabled={disabled} >
+                                        Mua vé ngay
                                     </Button>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-
                 </div>
-
-
             </div>
-
-
-
+            {/* Do layout này đã làm trước lúc vừa tiếp cận scss (chưa học React) nên em chủ yếu dùng bs4 và css thuần
+    nhưng API không chia ra phim sắp chiếu và phim đang chiếu (em làm phần này chỉ cho layout thêm phần sinh động)
+     nên phần này em không sửa lại 
+*/}
             {/*  Nav pills  */}
             <ul id="film-nav" class="nav nav-pills">
                 <li class="nav-item">

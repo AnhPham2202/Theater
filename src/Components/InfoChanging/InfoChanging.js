@@ -2,16 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
-import { useFormik } from 'formik';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
 import { useDispatch, useSelector } from 'react-redux';
 import { capNhatThongTinNguoiDung, layThongTinTaiKhoan } from '../../Redux/Actions/UserActions';
 import { darkOrange, orange } from '../../Util/var';
@@ -49,28 +44,33 @@ const useForm = makeStyles((theme) => ({
 }));
 
 export default function InfoChanging() {
-    const list = useList();
-    const btn = useButton();
-    const form = useForm();
     const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem('user'))
     const thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan)
-    let { taiKhoan, hoTen, email, soDT, matKhau, maNhom } = thongTinTaiKhoan
-    const [emailInput, setMail] = useState(email)
-    const [soDTInput, setSoDT] = useState(soDT)
-    const [hoTenInput, setHoTen] = useState(hoTen)
-    const [taiKhoanInput, setTaiKhoan] = useState(taiKhoan)
+    console.log(thongTinTaiKhoan)
+    // let { taiKhoan, hoTen, email, soDT, matKhau, maNhom } = thongTinTaiKhoan
+    
+
+    const list = useList();
+    const btn = useButton();
+    const form = useForm();
+    
+    const [emailInput, setMail] = useState()
+    const [soDTInput, setSoDT] = useState()
+    const [hoTenInput, setHoTen] = useState()
+    const [taiKhoanInput, setTaiKhoan] = useState()
+    
     let taiKhoanGuiLenApi = {
         taiKhoan: user.taiKhoan
     }
 
     useEffect(() => {
-        dispatch(layThongTinTaiKhoan(taiKhoanGuiLenApi)) // lấy thông tin từ api để sửa chức năng đăng nhập lưu pass vào local
-        setMail(email)
-        setSoDT(soDT)
-        setTaiKhoan(taiKhoan)
-        setHoTen(hoTen)
-    }, [email])
+        dispatch(layThongTinTaiKhoan(user.taiKhoan)) // lấy thông tin từ api để sửa chức năng đăng nhập lưu pass vào local
+        setMail(thongTinTaiKhoan[0]?.email)
+        setSoDT(thongTinTaiKhoan[0]?.soDt)
+        setTaiKhoan(thongTinTaiKhoan[0]?.taiKhoan)
+        setHoTen(thongTinTaiKhoan[0]?.hoTen)
+    }, [])
     const handleEmail = (event) => {
         setMail(event.target.value)
     }
@@ -83,10 +83,10 @@ export default function InfoChanging() {
         setHoTen(event.target.value)
     }
 
-    let onSubmit = () => {
+    const onSubmit = async () => {
         let thongTinTaiKhoanMoi = {
-            taiKhoan: taiKhoan,
-            matKhau: matKhau,
+            taiKhoan: thongTinTaiKhoan[0]?.taiKhoan,
+            matKhau: thongTinTaiKhoan[0]?.matKhau,
             email: emailInput,
             soDt: soDTInput,
             maNhom: 'GP03',

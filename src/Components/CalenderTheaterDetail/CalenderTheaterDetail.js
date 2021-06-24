@@ -16,7 +16,6 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import TodayIcon from '@material-ui/icons/Today';
-import { indexOf } from 'lodash';
 import { setThongTinRapTheoIndex } from '../../Redux/Actions/TheaterActions';
 
 
@@ -140,23 +139,22 @@ const useTabs = makeStyles((theme) => ({
 
 
 export default function CalenderTheaterDetail(props) {
-    const { mahethongrap } = props.match.params
-    const dispatch = useDispatch();
     const thongTinHeThongRap = useSelector(state => state.TheaterListReducer.paritcularTheaterFilmArr)
     const thongTinRap = useSelector(state => state.TheaterListReducer.theaterInfo)
-    const [rapIndex, setRapIndex] = useState(thongTinRap.firstRender)
+    const { mahethongrap } = props.match.params
+    const dispatch = useDispatch();
     const tabs = useTabs();
     const avatar = useAvatar();
     const btn = useButton();
     const accordion = useAccordion();
-    const [theater, setTheater] = useState(0);
     const [expanded, setExpanded] = useState(false);
+    const [rapIndex, setRapIndex] = useState(thongTinRap.firstRender)
+    const [value, setValue] = useState(rapIndex);
 
     const handleExpand = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
 
-    const [value, setValue] = useState(rapIndex);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -169,9 +167,8 @@ export default function CalenderTheaterDetail(props) {
         return thongTinHeThongRap[0]?.lstCumRap.map((theater, index) => {
 
             return (
-                <Tab onClick={() => {
+                <Tab key={index} onClick={() => {
                     setExpanded(false)
-                    setTheater(index)
                     setRapIndex(index)
                     dispatch(setThongTinRapTheoIndex({
                         name: theater.tenCumRap,
@@ -187,10 +184,9 @@ export default function CalenderTheaterDetail(props) {
         })
     }
     let renderFilm = () => {
-        return thongTinHeThongRap[0]?.lstCumRap[rapIndex]?.danhSachPhim.map(
-            (film, index) => {
+        return thongTinHeThongRap[0]?.lstCumRap[rapIndex]?.danhSachPhim.map((film, index) => {
                 return (
-                    <div className={accordion.root}>
+                    <div key={index} className={accordion.root}>
                         <Accordion expanded={expanded === index} onChange={handleExpand(index)}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}

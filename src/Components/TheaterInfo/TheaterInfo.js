@@ -2,28 +2,26 @@ import React, { useEffect } from 'react'
 import { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTheaterFilmFromApi } from '../../Redux/Actions/FilmAction';
+import { setThongTinRapTheoIndex } from '../../Redux/Actions/TheaterActions';
 
 export default function TheaterInfo(props) {
     const dispatch = useDispatch()
     const { mahethongrap } = props.match.params
     const theaterInfo = useSelector(state => state.TheaterListReducer.theaterInfo)
-    let theaterFilmArr = useSelector(state => state.TheaterListReducer.theaterFilmArr);
+    const theaterFilmArr = useSelector(state => state.TheaterListReducer.theaterFilmArr);
     let theaterNameFirstDispatch = theaterFilmArr[0]?.lstCumRap?.[0]?.tenCumRap
     let theaterAddressFirstDispatch = theaterFilmArr[0]?.lstCumRap?.[0]?.diaChi
 
     useEffect(() => {
         dispatch(getTheaterFilmFromApi());
-        dispatch({
-            type: 'SET_THEATER_INFO',
-            theaterInfo: {
-                name: theaterNameFirstDispatch,
-                address: theaterAddressFirstDispatch,
-                firstRender: theaterInfo.firstRender
-            }
-        })
+        dispatch(setThongTinRapTheoIndex({
+            name: theaterNameFirstDispatch,
+            address: theaterAddressFirstDispatch,
+            firstRender: theaterInfo.firstRender
+        }))
     }, [theaterNameFirstDispatch]);
     
-    let render = () => {
+    const render = () => {
         return theaterFilmArr.map((heThongRap, index) => {
             if (heThongRap.maHeThongRap === mahethongrap) {
                 theaterNameFirstDispatch = heThongRap.lstCumRap?.[theaterInfo.firstRender]?.tenCumRap
@@ -56,7 +54,6 @@ export default function TheaterInfo(props) {
     }
 
     return (
-        <Fragment>
             <div id="film-detail">
                 <div className="container">
                     <div className="row">
@@ -64,6 +61,5 @@ export default function TheaterInfo(props) {
                     </div>
                 </div>
             </div>
-        </Fragment>
     )
 }

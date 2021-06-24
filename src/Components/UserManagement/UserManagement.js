@@ -143,6 +143,8 @@ export default function UserManagement() {
     const [soDt, setSoDt] = useState()
     const [itemIndex, setItemIndex] = useState(0);
     const [search, setSearch] = useState();
+    const [triggerUseEffect, setTriggerUseEffect] = useState(false); // để khi nhấn vào các nút thay đổi thông tin thì load lại API, để k phải reload toàn bộ trang để thay đổi thông tin 
+
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     const handleEmail = (event) => {
         setEmail(event.target.value)
@@ -197,7 +199,7 @@ export default function UserManagement() {
             hoTen
         }
         console.log(user);
-        dispatch(chinhSuaUser(user))
+        dispatch(chinhSuaUser(user, triggerUseEffect, setTriggerUseEffect))
     }
 
 
@@ -295,7 +297,7 @@ export default function UserManagement() {
     const tacVu = (taiKhoan, itemIndex) => {
         return (
             <Fragment>
-                <label onClick={() => dispatch(xoaUser(taiKhoan))} htmlFor="icon-button-file">
+                <label onClick={() => dispatch(xoaUser(taiKhoan, triggerUseEffect, setTriggerUseEffect))} htmlFor="icon-button-file">
                     <Tooltip title="Xóa người dùng">
                         <IconButton aria-label="delete user" component="span">
                             <DeleteIcon />
@@ -336,8 +338,10 @@ export default function UserManagement() {
             setSoDt(nguoiDungPhanTrang.items?.[itemIndex].soDt)
             setMaLoaiNguoiDung(nguoiDungPhanTrang.items?.[itemIndex].maLoaiNguoiDung)
         }
-    }, [page, rowsPerPage, open, itemIndex, search])
-
+    }, [page, rowsPerPage, open, itemIndex, search, triggerUseEffect])
+    useEffect(() => {
+        setPage(0)
+    }, [search])
 
     nguoiDungPhanTrang.items?.map((user, index) => {
         rows.push({

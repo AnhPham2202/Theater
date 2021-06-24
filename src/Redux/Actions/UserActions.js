@@ -12,6 +12,7 @@ export const dangKy = (user) => {
                 data: user
             })
             if (result.data) {
+                alert('Đăng ký thành công, hãy đăng nhập !!!')
                 history.push('/dangnhap')
             }
         } catch (error) {
@@ -37,7 +38,7 @@ export const dangNhap = (userLogin) => {
             localStorage.setItem('t', result.data.accessToken)
 
             alert('Đăng nhập thành công')
-            history.push('/')
+            history.push('/')  
         } catch (err) {
             console.log(err.response?.data)
             alert(err.response?.data)
@@ -77,6 +78,28 @@ export const datVe = (info) => {
     }
 }
 
+export const layThongTinGheDaDat = (taiKhoan) => {
+    return async (dispatch) => {
+        try {
+            console.log(taiKhoan)
+
+            const result = await axios({
+                url: `https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/ThongTinTaiKhoan`,
+                method: 'POST',
+                data: taiKhoan
+            })
+
+            dispatch({
+                type: 'SET_GHE_DAT',
+                thongTinGheDaDat: result.data.thongTinDatVe
+            })
+        } catch (error) {
+            console.log(456)
+            console.log(error.response.data);
+        }
+
+    }
+}
 export const layThongTinTaiKhoan = (taiKhoan) => {
     return async (dispatch) => {
         try {
@@ -164,8 +187,8 @@ export const capNhatThongTinNguoiDung = (newInfo) => {
                 data: newInfo,
                 headers: { 'Authorization': 'Bearer ' + TOKEN }
             })
-            console.log(result.data);
-            alert('ok')
+            window.location.reload()           
+            alert('Đã thay đổi thông tin thành công !!!')
         } catch (error) {
             console.log(error);
         }

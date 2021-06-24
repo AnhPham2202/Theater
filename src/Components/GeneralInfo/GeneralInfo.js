@@ -61,18 +61,16 @@ const useButton = makeStyles((theme) => ({
 
 
 export default function FolderList() {
-    const list = useList();
-    const text = useText();
-    const btn = useButton();
     const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem('user'))
     const thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan)
-    let { taiKhoan, hoTen, email, soDT, matKhau, maNhom } = thongTinTaiKhoan
-    let taiKhoanGuiLenApi = {
-        taiKhoan: user.taiKhoan
-    }
+
+    const list = useList();
+    const text = useText();
+    const btn = useButton();
+
     useEffect(()=> {
-        dispatch(layThongTinTaiKhoan(taiKhoanGuiLenApi)) 
+        dispatch(layThongTinTaiKhoan(user.taiKhoan)) 
     }, [])
 
     return (
@@ -89,7 +87,7 @@ export default function FolderList() {
                 </ListItemAvatar>
                 <Box component="span" m={1}>
                     <Typography className={text.titleText} variant="subtitle1" gutterBottom>
-                        Tên khách hàng: <span>{hoTen}</span>
+                        Tên khách hàng: <span>{thongTinTaiKhoan[0]?.hoTen}</span>
                     </Typography>
                     <ListItemText secondary="Họ và tên chủ tài khoản, cũng là tên của tài khoản hiển thị trên website. Bạn có thể thay đổi ở phần thay đổi thông tin cá nhân" />
 
@@ -105,7 +103,7 @@ export default function FolderList() {
                 </ListItemAvatar>
                 <Box component="span" m={1}>
                     <Typography className={text.titleText} variant="subtitle1" gutterBottom>
-                        Tài khoản: <span>{taiKhoan}</span>
+                        Tài khoản: <span>{thongTinTaiKhoan[0]?.taiKhoan}</span>
                     </Typography>
                     <ListItemText secondary="Là tên tài khoản (username) để đăng nhập tài khoản." />
 
@@ -141,7 +139,7 @@ export default function FolderList() {
                 </ListItemAvatar>
                 <Box component="span" m={1}>
                     <Typography className={text.titleText} variant="subtitle1" gutterBottom>
-                        Số điện thoại: <span>{soDT}</span>
+                        Số điện thoại: <span>{thongTinTaiKhoan[0]?.soDT}</span>
                     </Typography>
                     <ListItemText secondary="Số điện thoại dùng để đăng kí tài khoản. Thông tin này có thể được dùng để xác minh bạn là chủ sở hữu tài khoản nhằm thiết lập lại mật khẩu" />
 
@@ -157,7 +155,7 @@ export default function FolderList() {
                 </ListItemAvatar>
                 <Box component="span" m={1}>
                     <Typography className={text.titleText} variant="subtitle1" gutterBottom>
-                        Email cá nhân: <span>{email}</span>
+                        Email cá nhân: <span>{thongTinTaiKhoan[0]?.email}</span>
                     </Typography>
                     <ListItemText secondary="Email có thể được sử dụng để thay đổi mật khẩu khi không có công cụ bảo mật nào khác được bật. Cũng như nhận các tin tức hoạt động của tài khoản." />
 

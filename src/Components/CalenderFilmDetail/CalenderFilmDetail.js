@@ -117,9 +117,9 @@ const useTabs = makeStyles((theme) => ({
 
 
 export default function CalenderFilmDetail(props) {
-  const dispatch = useDispatch();
   const filmDetail = useSelector((state) => state.FilmDetailReducer.chiTietPhim);
   const { id } = props.match.params;
+  const dispatch = useDispatch();
   const tabs = useTabs();
   const avatar = useAvatar();
   const grid = useGrid();
@@ -138,18 +138,16 @@ export default function CalenderFilmDetail(props) {
   };
 
 
-  //đôi tên biến demo
 
   useEffect(() => {
     dispatch(getFilmDetailFromApi(id));
   }, []);
 
 
-  // =================================================MAIN UI================================================
   let renderLogo = () => {
     return filmDetail.heThongRapChieu?.map((theaterInfo, index) => {
       return (
-        <Tab onClick={() => {
+        <Tab key={index} onClick={() => {
           setExpanded(false)
           setTheater(index)
         }} label={
@@ -167,16 +165,15 @@ export default function CalenderFilmDetail(props) {
   let renderTheater = () => {
     return filmDetail.heThongRapChieu?.[theater]?.cumRapChieu.map(
       (cumRap, index) => {
-        console.log(cumRap)
         return (
-          <div className={accordion.root}>
+          <div key={index} className={accordion.root}>
             <Accordion expanded={expanded === index} onChange={handleExpand(index)}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <div key={index} className={grid.root}>
+                <div className={grid.root}>
                   <Grid container spacing={5}>
                     <Grid item xs={1}>
                       <Avatar src={filmDetail.heThongRapChieu[theater].logo} />
@@ -201,7 +198,7 @@ export default function CalenderFilmDetail(props) {
   let renderTime = (lichChieu) => {
     return lichChieu.map((lich, index) => {
       return (
-        <AccordionDetails className={accordion.accordionDetail}>
+        <AccordionDetails key={index} className={accordion.accordionDetail}>
           <Button variant="outlined">
             <NavLink to={`/chitietphongve/${lich.maLichChieu}`}>
               <TodayIcon style={{ marginRight: 2, color: 'black' }} />
@@ -215,7 +212,7 @@ export default function CalenderFilmDetail(props) {
 
 
   return (
-    <div className={tabs.root}>
+    <div id="filmCalender" className={tabs.root}>
       <Tabs
         orientation="vertical"
         variant="scrollable"

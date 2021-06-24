@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { getFilmDetailFromApi } from "../../Redux/Actions/FilmAction";
@@ -7,7 +7,6 @@ import { getFilmDetailFromApi } from "../../Redux/Actions/FilmAction";
 export default function FilmInfo(props) {
   let dispatch = useDispatch();
   let filmDetail = useSelector((state) => state.FilmDetailReducer.chiTietPhim);
-  console.log(filmDetail);
   let { id } = props.match.params;
   let ngayKhoiChieu = filmDetail.ngayKhoiChieu?.split("T")[0];
   let thoiLuong = filmDetail.heThongRapChieu?.[0]?.cumRapChieu?.[0].lichChieuPhim[0].thoiLuong;
@@ -47,13 +46,14 @@ export default function FilmInfo(props) {
             </div>
 
             <a data-lity href={filmDetail.trailer}><button className="btn mr-3">Xem Trailer</button></a>
-            <NavLink to={`/chitietphongve/${filmDetail.maPhim}`}>
+            <a href="#filmCalender">
               <button className="btn mr-3 font-weight-bold">Mua Vé Ngay</button>
-            </NavLink>
+            </a>
           </div>
         </div>
         <div></div>
       </div>
     </div>
+ 
   );
 }

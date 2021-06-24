@@ -68,12 +68,6 @@ export default function AddUser() {
     const btn = useButton();
     const select = useSelect();
 
-    // const [hoTen, setHoten] = useState()
-    // const [taiKhoan, setTaiKhoan] = useState()
-    // const [matKhau, setMatKhau] = useState()
-    // const [email, setEmail] = useState()
-    // const [soDt, setSoDt] = useState()
-
     const [user, setUser] = useState({
         taiKhoan: '',
         matKhau: '',
@@ -116,7 +110,6 @@ export default function AddUser() {
                         <InputLabel htmlFor="age-native-simple">Loại người dùng</InputLabel>
                         <Select
                             native
-
                             onChange={handleSelectChange}
                             inputProps={{
                                 name: 'maLoaiNguoiDung',

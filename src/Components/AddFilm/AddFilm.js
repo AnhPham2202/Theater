@@ -51,7 +51,6 @@ export default function AddFilm() {
     const form = useForm();
     const list = useList();
     const btn = useButton();
-    let formData = new FormData()
     let phimMoi = {
         maNhom: 'GP03',
         danhGia: 0,
@@ -76,10 +75,12 @@ export default function AddFilm() {
     }
     const onSubmit = (e) => {
         e.preventDefault()
+        let formData = new FormData()
 
         for (let key in phimMoi) {
             formData.append(key, phimMoi[key])
         }
+
         dispatch(themPhim(formData))
     }
     return (
@@ -99,7 +100,7 @@ export default function AddFilm() {
                     <div className={btn.root}>
                         <Button type="submit" variant="contained" color="secondary">
                             Thêm phim
-                    </Button>
+                        </Button>
                     </div>
 
                 </form>

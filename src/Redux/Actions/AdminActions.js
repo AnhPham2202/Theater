@@ -19,7 +19,7 @@ export const layPhimPhanTrang = (trangHienTai, soPhanTu, tuKhoa) => {
     }
 }
 
-export const xoaPhim = (maPhim) => {
+export const xoaPhim = (maPhim, triggerUseEffect, setTriggerUseEffect) => {
     return async () => {
         try {
             const TOKEN = localStorage.getItem('t') 
@@ -28,6 +28,8 @@ export const xoaPhim = (maPhim) => {
                 method: 'DELETE',
                 headers: { Authorization: 'Bearer ' + TOKEN }
             })
+            setTriggerUseEffect(!triggerUseEffect)
+            alert(result.data);
         } catch (error) {
             alert(error.response?.data);
         }
@@ -59,8 +61,7 @@ export const themPhim = (phim) => {
     }
 }
 
-export const chinhSuaPhim = (phim) => {
-    console.log('chinhsua');
+export const chinhSuaPhim = (phim, triggerUseEffect, setTriggerUseEffect) => {
     try {
         return async (dispatch) => {
             const TOKEN = localStorage.getItem('t') 
@@ -70,10 +71,11 @@ export const chinhSuaPhim = (phim) => {
                 data: phim,
                 headers: { Authorization: 'Bearer ' + TOKEN }
             })
-            console.log('try chinh sua');
+            setTriggerUseEffect(!triggerUseEffect)
+            alert('Chỉnh sửa phim thành công !!!')
         }
     } catch (error) {
-        console.log(error.response?.data);
+        alert(error.response?.data);
     }
 
 }
@@ -110,7 +112,7 @@ export const layDanhSachNguoiDungPhanTrang = (trangHienTai, soPhanTu, tuKhoa) =>
     }
 }
 
-export const xoaUser = (taiKhoan) => {
+export const xoaUser = (taiKhoan, triggerUseEffect, setTriggerUseEffect) => {
     return async () => {
         try {
             const TOKEN = localStorage.getItem('t') 
@@ -119,6 +121,7 @@ export const xoaUser = (taiKhoan) => {
                 method: 'DELETE',
                 headers: { Authorization: 'Bearer ' + TOKEN}
             })
+            setTriggerUseEffect(!triggerUseEffect)
             alert(result.data);
         } catch (error) {
             alert(error.response?.data);
@@ -126,7 +129,7 @@ export const xoaUser = (taiKhoan) => {
     }
 }
 
-export const chinhSuaUser = (user) => {
+export const chinhSuaUser = (user, triggerUseEffect, setTriggerUseEffect) => {
     try {
         return async (dispatch) => {
             const TOKEN = localStorage.getItem('t') 
@@ -136,6 +139,7 @@ export const chinhSuaUser = (user) => {
                 data: user,
                 headers: { Authorization: 'Bearer ' + TOKEN }
             })
+            setTriggerUseEffect(!triggerUseEffect)
             alert('Thay đổi thông tin thành công')
         }
     } catch (error) {

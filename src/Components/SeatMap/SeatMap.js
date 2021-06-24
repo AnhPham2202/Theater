@@ -15,7 +15,7 @@ export default function SeatMap(props) {
         dispatch(layChiTietPhongVe(malichchieu))
     }, [])
 
-    let renderSeat = () => {
+    const renderSeat = () => {
         return thongTinChiTietPhongVe.danhSachGhe?.map((ghe, index) => {
             let chuoiClassSauKhiCheckTinhTrangGhe = () => {
                 let classString = ''
@@ -41,14 +41,14 @@ export default function SeatMap(props) {
                 )
             }
             return (
-                <div className='seat-div text-center'>
+                <div key={index} className='seat-div text-center'>
                     <button onClick={() => dispatch(themGhe(ghe))}  className={chuoiClassSauKhiCheckTinhTrangGhe()} >{ghe.tenGhe}</button>
                 </div>
             )
             
         })
     }
-    let renderGhiChu = () => {
+    const renderGhiChu = () => {
         return (
             <div className="mt-4" style={{display: 'flex', justifyContent:'space-between', paddingTop: '30px'}}>
                 <div>
@@ -73,7 +73,6 @@ export default function SeatMap(props) {
     return (
         <div className="container">
             <img className="w-100" src={screen}></img> 
-            {/* <div className='bg-dark text-center text-white mb-5' >Màn hình</div> */}
             {renderSeat()}
             {renderGhiChu()}
         </div>

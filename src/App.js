@@ -17,22 +17,25 @@ import Admin from "./Pages/Admin/Admin";
 import HeaderStepper from "./Components/Header/HeaderStepper";
 import { Fragment } from "react";
 import TicketBookingTemplate from "./Templates/TicketBookingTemplate/TicketBookingTemplate";
+import ScrollToTop from "./Redux/Actions/ScrollTopWhenChangePage";
 
 
 export const history = createBrowserHistory()
 function App() {
+
   return (
     <Router history={history}>
-      <Switch>
-        <ManagementTemplate path="/admin" component={Admin} />
-        <ManagementTemplate path="/thongtincanhan" component={UserPage} />
-        <HomeTemplate path="/dangnhap" component={SignIn} />
-        <HomeTemplate path="/dangky" component={SignUp} />
-        <HomeTemplate path='/theaterdetail/:mahethongrap' component={TheaterDetail} />
-        <HomeTemplate path="/filmdetail/:id" component={FilmDetail} />
-        <HomeTemplate path="/" exact component={Home} />
-        <TicketBookingTemplate path="/chitietphongve/:malichchieu" component={TicketBoongking} />
-      </Switch>
+      <ScrollToTop />
+        <Switch>
+          <ManagementTemplate path="/admin" component={Admin} />
+          <ManagementTemplate path="/thongtincanhan" component={UserPage} />
+          <HomeTemplate path="/dangnhap" component={SignIn} />
+          <HomeTemplate path="/dangky" component={SignUp} />
+          <HomeTemplate path='/theaterdetail/:mahethongrap' component={TheaterDetail} />
+          <HomeTemplate path="/filmdetail/:id" component={FilmDetail} />
+          <HomeTemplate path="/" exact component={Home} />
+          <TicketBookingTemplate path="/chitietphongve/:malichchieu" component={TicketBoongking} />
+        </Switch>
     </Router>
   );
 }

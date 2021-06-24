@@ -89,14 +89,15 @@ export default function HeaderStepper() {
     const user = JSON.parse(localStorage.getItem('user'))
 
     const step = useSelector(state => state.TicketBookingReducer.stepper)
-    let tenDN = useSelector(state => state.UserReducer.tenDangNhap)
-    let thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan[0])
+    const tenDN = useSelector(state => state.UserReducer.tenDangNhap)
+    const thongTinTaiKhoan = useSelector(state => state.UserReducer.thongTinTaiKhoan[0])
 
     const dropdown = useDropDown();
     const btn = useButton();
     const list = useList();
     const stepper = useStepper();
     const steps = getSteps();
+    
     const [open, setOpen] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
