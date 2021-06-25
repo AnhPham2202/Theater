@@ -34,7 +34,10 @@ export const dangNhap = (userLogin) => {
                 type: 'DANG_NHAP',
                 tenDangNhap: result.data.taiKhoan
             })
-            localStorage.setItem('user', JSON.stringify(result.data))
+            localStorage.setItem('user', JSON.stringify({
+                taiKhoan: result.data.taiKhoan,
+                accessToken: result.data.accessToken
+            }))
             localStorage.setItem('t', result.data.accessToken)
 
             alert('Đăng nhập thành công')

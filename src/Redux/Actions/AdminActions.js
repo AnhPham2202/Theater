@@ -143,7 +143,7 @@ export const chinhSuaUser = (user, triggerUseEffect, setTriggerUseEffect) => {
             alert('Thay đổi thông tin thành công')
         }
     } catch (error) {
-        console.log(error.response?.data);
+        alert(error.response?.data);
     }
 
 }
@@ -202,18 +202,17 @@ export const layThongTinCumRapTheoHeThong = (heThongRap) => {
 export const taoLichChieu = (thongTinLichChieu) => {
     return async (dispatch) => {
         try {
-            console.log(thongTinLichChieu)
             const TOKEN = localStorage.getItem('t')
 
-            const result = axios({
+            const result = await axios({
                 url: 'https://movie0706.cybersoft.edu.vn/api/QuanLyDatVe/TaoLichChieu',
                 method: 'POST',
                 headers: { Authorization: 'Bearer ' + TOKEN },
                 data: thongTinLichChieu
             })
-            alert('Tạo lịch chiếu thành công !!!')
+            alert(result.response.data)
         } catch (error) {
-            console.log(error.response.data)
+            alert(error.response.data)
         }
     }
 }

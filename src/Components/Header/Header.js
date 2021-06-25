@@ -85,10 +85,10 @@ export default function Header() {
 
 
     useEffect(() => {
-        dispatch(layThongTinTaiKhoan(tenDN))
-    }, [tenDN])
+        dispatch(layThongTinTaiKhoan(user?.taiKhoan))
+    }, [user?.taiKhoan])
 
-
+    console.log(user?.taiKhoan)
     const dropDown = () => {
         return (
             <div className={list.root}>
