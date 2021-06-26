@@ -15,14 +15,13 @@ import UserPage from "./Pages/UserPage/UserPage";
 import '@fontsource/roboto';
 import Admin from "./Pages/Admin/Admin";
 import HeaderStepper from "./Components/Header/HeaderStepper";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import TicketBookingTemplate from "./Templates/TicketBookingTemplate/TicketBookingTemplate";
 import ScrollToTop from "./Redux/Actions/ScrollTopWhenChangePage";
 
 
 export const history = createBrowserHistory()
 function App() {
-
   return (
     <Router history={history}>
       <ScrollToTop />

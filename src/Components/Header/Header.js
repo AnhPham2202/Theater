@@ -11,6 +11,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import { history } from '../../App'
 const useList = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -88,7 +89,6 @@ export default function Header() {
         dispatch(layThongTinTaiKhoan(user?.taiKhoan))
     }, [user?.taiKhoan])
 
-    console.log(user?.taiKhoan)
     const dropDown = () => {
         return (
             <div className={list.root}>
@@ -130,11 +130,12 @@ export default function Header() {
                         onClickAway={handleClickAway}
                     >
                         <div style={{ display: 'inline-block' }} className={dropdown.root}>
-                            <Button variant="outlined" className="mr-2" type="button" onClick={handleClick}>
 
-                                {tenDN == '' ? <NavLink to="/dangnhap" > Đăng nhập</NavLink>
-                                    : `Hi, ${tenDN}`}
-                            </Button>
+
+                            {tenDN == '' ?
+                                (<Button variant="outlined" className="mr-2" type="button" onClick={() => history.push('/dangnhap')}>Đăng nhập</Button>)
+                                :
+                                (<Button variant="outlined" className="mr-2" type="button" onClick={handleClick}>Hi, {tenDN}</Button>)}
 
                             {open && tenDN ? (
                                 <div className={dropdown.dropdown}>
@@ -149,8 +150,8 @@ export default function Header() {
                         {/* tách làm 2 BUtton chứ k ghi 1 Button rồi cho điều kiện render vào trong vì như v sẽ 
                     phải để onClick vào thẻ span làm cho lúc click ở viền nút lúc đăng xuất sẽ k handle được function */}
                         {tenDN == '' ? (
-                            <Button className variant="outlined">
-                                < NavLink to='/dangky'>Đăng ký</NavLink>
+                            <Button className variant="outlined" onClick={() => history.push('/dangky')}>
+                                Đăng ký
                             </Button>
                         )
                             : (
